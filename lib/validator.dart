@@ -12,7 +12,7 @@ class Validator {
   // Don't let anyone instantiate this
   const Validator._();
 
-  /// <p> V<alidates that the given email address is valid by matching it
+  /// <p> Validates that the given email address is valid by matching it
   /// against the defined regular expression pattern. </p>>
   /// <b> Email Address structure: </b>
   /// <p> - username@domain </p>
