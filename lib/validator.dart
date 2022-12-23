@@ -2,11 +2,12 @@
 
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/errors.dart';
-
-typedef Result<T> = Either<ValueError<T>, T>;
+import 'package:nappy_mobile/types.dart';
 
 /// The validator class contains a set helper functions
 /// for validating different types of inputs, mostly text field inputs.
+///
+/// Test case: `/test/validator_test.dart`
 class Validator {
   static const int kPasswordLengthRequired = 6;
   // Don't let anyone instantiate this
@@ -44,7 +45,7 @@ class Validator {
       r'^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$',
     );
     if (!regExp.hasMatch(rawEmail)) {
-      return left(ValueError(error: rawEmail));
+      return left(InvalidEmailError(rawEmail));
     }
     return right(rawEmail);
   }
@@ -69,7 +70,7 @@ class Validator {
   /// - _A1-4
   static Result<String> validatePassword(String rawPassword) {
     if (rawPassword.length < kPasswordLengthRequired) {
-      return left(ValueError(error: rawPassword));
+      return left(PasswordLengthError(rawPassword));
     } else {
       return right(rawPassword);
     }
