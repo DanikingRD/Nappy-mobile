@@ -8,6 +8,8 @@ abstract class NonNullValue<T> {
 
   Either<ValueError<T>, T> get value;
 
+  bool isValid() => value.isRight();
+
   @override
   bool operator ==(covariant Object other) {
     if (identical(this, other)) return true;

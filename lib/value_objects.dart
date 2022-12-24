@@ -14,6 +14,7 @@ class PasswordValue extends NonNullValue<String> {
 
   @override
   Either<ValueError<String>, String> get value => val;
+
 }
 
 class EmailAddressValue extends NonNullValue<String> {
