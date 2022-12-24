@@ -1,20 +1,19 @@
+import 'package:flutter_backend_utils/errors.dart';
 import 'package:flutter_backend_utils/value_objects.dart';
+import 'package:fpdart/fpdart.dart';
 
 /// Represents an Authentication Repository.
 /// Feel free to further extend this.
 abstract class IAuthRepository {
-  /// Register generic user with email and password
-  Future<void> registerWithEmailAndPassword({
+  Future<Either<AuthError, Unit>> registerWithEmailAndPassword({
     required EmailAddressValue email,
     required PasswordValue password,
   });
 
-  /// Sign in with email and password
-  Future<void> signInWithEmailAndPassword({
+  Future<Either<AuthError, Unit>> signInWithEmailAndPassword({
     required EmailAddressValue email,
     required PasswordValue password,
   });
 
-  /// Sign in with Google services.
-  Future<void> signInWithGoogle();
+  Future<Either<AuthError, Unit>> signInWithGoogle();
 }

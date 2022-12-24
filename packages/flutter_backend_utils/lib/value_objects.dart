@@ -15,6 +15,7 @@ class PasswordValue extends NonIllegalValue<String> {
 
   @override
   Either<ValueError<String>, String> get value => val;
+
 }
 
 /// Represents a non-illegal email address typically inputted by the user.
