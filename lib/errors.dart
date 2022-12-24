@@ -12,3 +12,8 @@ class InvalidEmailError extends ValueError<String> {
 class PasswordLengthError extends ValueError<String> {
   PasswordLengthError(String error) : super(error: error);
 }
+
+
+class AuthError {
+
+}

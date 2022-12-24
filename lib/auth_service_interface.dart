@@ -1,15 +1,17 @@
+import 'package:fpdart/fpdart.dart';
+import 'package:nappy_mobile/errors.dart';
 import 'package:nappy_mobile/value_objects.dart';
 
 abstract class IAuthRepository {
-  Future<void> registerWithEmailAndPassword({
+  Future<Either<AuthError, Unit>> registerWithEmailAndPassword({
     required EmailAddressValue email,
     required PasswordValue password,
   });
 
-  Future<void> signInWithEmailAndPassword({
+  Future<Either<AuthError, Unit>> signInWithEmailAndPassword({
     required EmailAddressValue email,
     required PasswordValue password,
   });
 
-  Future<void> signInWithGoogle();
+  Future<Either<AuthError, Unit>> signInWithGoogle();
 }
