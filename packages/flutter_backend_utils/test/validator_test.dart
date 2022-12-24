@@ -2,8 +2,8 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/errors.dart';
-import 'package:nappy_mobile/validator.dart';
+import 'package:flutter_backend_utils/errors.dart';
+import 'package:flutter_backend_utils/validator.dart';
 
 typedef Success<T> = Right<ValueError<String>, String>;
 typedef Error<T> = Left<ValueError<String>, String>;
@@ -28,12 +28,15 @@ void main() {
         expect(Validator.validateEmail(entry), isA<Error<String>>());
       }
     });
-  
-    test("Password must be at least 6 characters long", () {
+
+    test("Password must be at least N characters long", () {
       const superStrongPassword = "123456";
       const invalidPassword = "i2345";
+      // Defaults to 6
       expect(Validator.validatePassword(superStrongPassword), isA<Success<String>>());
       expect(Validator.validateEmail(invalidPassword), isA<Error<String>>());
+      // It is now valid because we have decreased the min length.
+      expect(Validator.validatePassword(invalidPassword, 4), isA<Success<String>>());
     });
   });
 }

@@ -1,5 +1,5 @@
+import 'package:flutter_backend_utils/errors.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/errors.dart';
 
 // TODO: find a better name for this type as this does not always
 // represents the result of some processing.

@@ -1,11 +1,12 @@
+import 'package:flutter_backend_utils/non_illegal_value.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/errors.dart';
-import 'package:nappy_mobile/non_null_value.dart';
-import 'package:nappy_mobile/validator.dart';
+import 'package:flutter_backend_utils/errors.dart';
+import 'package:flutter_backend_utils/validator.dart';
 
-class PasswordValue extends NonNullValue<String> {
+/// Represents a non-illegal password typically inputted by the user.
+class PasswordValue extends NonIllegalValue<String> {
   final Either<ValueError<String>, String> val;
-
+  
   factory PasswordValue(String raw) {
     return PasswordValue._(Validator.validatePassword(raw));
   }
@@ -16,7 +17,8 @@ class PasswordValue extends NonNullValue<String> {
   Either<ValueError<String>, String> get value => val;
 }
 
-class EmailAddressValue extends NonNullValue<String> {
+/// Represents a non-illegal email address typically inputted by the user.
+class EmailAddressValue extends NonIllegalValue<String> {
   final Either<ValueError<String>, String> val;
 
   factory EmailAddressValue(String raw) {

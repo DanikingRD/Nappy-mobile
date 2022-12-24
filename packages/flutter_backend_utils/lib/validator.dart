@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:flutter_backend_utils/errors.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/errors.dart';
-import 'package:nappy_mobile/types.dart';
 
 /// The validator class contains a set helper functions
 /// for validating different types of inputs, mostly text field inputs.
@@ -40,7 +39,7 @@ class Validator {
   /// - Abc.example.com
   /// - this..is-not@right
   /// - it\just;wont=work@notallowed
-  static Result<String> validateEmail(String rawEmail) {
+  static Either<ValueError<String>, String> validateEmail(String rawEmail) {
     final RegExp regExp = RegExp(
       r'^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$',
     );
@@ -57,7 +56,7 @@ class Validator {
   /// - The password must be at least 6 characters long.
   ///
   ///<b> Here are some example of valid and invalid passwords: </b>
-  ///
+  /// 
   /// Valid passwords:
   ///
   /// - 123456
@@ -68,8 +67,9 @@ class Validator {
   /// - 12345
   /// - abcde
   /// - _A1-4
-  static Result<String> validatePassword(String rawPassword) {
-    if (rawPassword.length < kPasswordLengthRequired) {
+  static Either<ValueError<String>, String> validatePassword(String rawPassword,
+      [int len = kPasswordLengthRequired]) {
+    if (rawPassword.length < len) {
       return left(PasswordLengthError(rawPassword));
     } else {
       return right(rawPassword);
