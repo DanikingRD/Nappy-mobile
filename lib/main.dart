@@ -14,7 +14,10 @@ class Nappy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginView(),
+      home: const ScrollConfiguration(
+        behavior: ExtendedScrollBehaviour(),
+        child: LoginView(),
+      ),
       theme: ThemeData(
         inputDecorationTheme: kPrimaryInputDecorationTheme,
         scaffoldBackgroundColor: Colors.white,
@@ -30,5 +33,14 @@ class Nappy extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
     );
+  }
+}
+
+class ExtendedScrollBehaviour extends ScrollBehavior {
+  const ExtendedScrollBehaviour();
+
+  @override
+  ScrollPhysics getScrollPhysics(BuildContext context) {
+    return const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics());
   }
 }

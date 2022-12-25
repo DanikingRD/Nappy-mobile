@@ -17,21 +17,18 @@ class LoginView extends ConsumerWidget {
       resizeToAvoidBottomInset: false, // Prevent TextField resizing widgets
       body: SafeArea(
         child: Center(
-          child: SizedBox(
-            width: kDefaultViewWidth,
-            child: Column(
-              children: [
-                const Expanded(
-                  flex: 4,
-                  child: LoginBody(),
-                ),
-                const Spacer(),
-                SvgPicture.asset(
-                  kWaveSvgPath,
-                  width: kDefaultViewWidth,
-                ),
-              ],
-            ),
+          child: Column(
+            children: [
+              const Expanded(
+                flex: 4,
+                child: LoginBody(),
+              ),
+              const Spacer(),
+              SvgPicture.asset(
+                kWaveSvgPath,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ],
           ),
         ),
       ),
@@ -46,79 +43,75 @@ class LoginBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    return ListView(
-      padding: isMobile(context) ? kMobilePadding : EdgeInsets.zero,
-      shrinkWrap: true,
-      children: [
-        const SizedBox(
-          height: 30,
-        ),
-        Text("Sign in", style: textTheme.headline1),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          "Please fill in the credentials",
-          style: textTheme.subtitle1!.copyWith(
-            color: NappyColors.mutedText,
+    return SizedBox(
+      width: 400,
+      child: ListView(
+        
+        padding: isMobile(context) ? kMobilePadding : EdgeInsets.zero,
+        shrinkWrap: true,
+        children: [
+          const SizedBox(
+            height: 30,
           ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        TextFormField(
-          decoration: InputDecoration(
+          Text("Sign in", style: textTheme.headline1),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Please fill in the credentials",
+            style: textTheme.subtitle1!.copyWith(
+              color: NappyColors.mutedText,
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.email_outlined,
+                color: theme.iconTheme.color,
+              ),
+              hintText: "Enter your email address",
+            ),
+          ),
+          kTextFieldGap,
+          VisibilityTextField(
+            hintText: "Enter your password",
             prefixIcon: Icon(
-              Icons.email_outlined,
+              Icons.lock_outline,
               color: theme.iconTheme.color,
             ),
-            hintText: "Enter your email address",
           ),
-        ),
-        kTextFieldGap,
-        // TextFormField(
-        //   decoration: InputDecoration(
-        //       hintText: "Enter your password",
-        //       prefixIcon: Icon(
-        //         Icons.lock_outline,
-        //         color: theme.iconTheme.color,
-        //       )),
-        // ),
-        VisibilityTextField(
-          hintText: "Enter your password",
-          prefixIcon: Icon(
-            Icons.lock_outline,
-            color: theme.iconTheme.color,
-          ),
-        ),
-        kTextFieldGap,
-        Align(
-          alignment: Alignment.topRight,
-          child: Text(
-            "Forgot password?",
-            style: textTheme.bodyText1,
-          ),
-        ),
-        kDefaultMargin,
-        PrimaryButton(
-          onPressed: () {},
-          child: Text("Sign in"),
-        ),
-        kDefaultMargin,
-        Row(
-          children: [
-            Text(
-              "Not a member yet?",
-              style: textTheme.subtitle1,
+          kTextFieldGap,
+          Align(
+            alignment: Alignment.topRight,
+            child: Text(
+              "Forgot password?",
+              style: textTheme.bodyText1,
             ),
-            const Spacer(),
-            Text(
-              "Sign Up",
-              style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
-            ),
-          ],
-        )
-      ],
+          ),
+          kDefaultMargin,
+          PrimaryButton(
+            onPressed: () {},
+            child: Text("Sign in"),
+          ),
+          kDefaultMargin,
+          Row(
+            children: [
+              Text(
+                "Not a member yet?",
+                style: textTheme.subtitle1,
+              ),
+              const Spacer(),
+              Text(
+                "Sign Up",
+                style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
