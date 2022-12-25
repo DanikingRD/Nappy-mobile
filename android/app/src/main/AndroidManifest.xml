@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nappy_mobile">
+    package="com.nappy.cards">
    <application
         android:label="nappy_mobile"
         android:name="${applicationName}"

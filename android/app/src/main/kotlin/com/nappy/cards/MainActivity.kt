@@ -1,4 +1,4 @@
-package com.example.nappy_mobile
+package com.nappy.cards
 
 import io.flutter.embedding.android.FlutterActivity
 

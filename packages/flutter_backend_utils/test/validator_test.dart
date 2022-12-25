@@ -1,12 +1,6 @@
-// ignore_for_file: unnecessary_string_escapes
-
+import 'package:flutter_backend_utils/types.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:fpdart/fpdart.dart';
-import 'package:flutter_backend_utils/errors.dart';
 import 'package:flutter_backend_utils/validator.dart';
-
-typedef Success<T> = Right<ValueError<String>, String>;
-typedef Error<T> = Left<ValueError<String>, String>;
 
 void main() {
   group("Validator Test", () {
@@ -25,7 +19,7 @@ void main() {
         "it\just;wont=work@notallowed"
       ];
       for (final entry in invalidEmails) {
-        expect(Validator.validateEmail(entry), isA<Error<String>>());
+        expect(Validator.validateEmail(entry), isA<Failure<String>>());
       }
     });
 
@@ -34,7 +28,7 @@ void main() {
       const invalidPassword = "i2345";
       // Defaults to 6
       expect(Validator.validatePassword(superStrongPassword), isA<Success<String>>());
-      expect(Validator.validateEmail(invalidPassword), isA<Error<String>>());
+      expect(Validator.validateEmail(invalidPassword), isA<Failure<String>>());
       // It is now valid because we have decreased the min length.
       expect(Validator.validatePassword(invalidPassword, 4), isA<Success<String>>());
     });

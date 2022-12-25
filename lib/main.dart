@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nappy_mobile/features/auth/views/login_view.dart';
 
 void main(List<String> args) {
-  runApp(const Nappy());
+  runApp(const ProviderScope(child:  Nappy()));
 }
 
 class Nappy extends StatelessWidget {
@@ -9,14 +11,8 @@ class Nappy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          children: const [
-            Text("My App"),
-          ],
-        ),
-      ),
+    return const MaterialApp(
+      home: LoginView(),
     );
   }
 }
