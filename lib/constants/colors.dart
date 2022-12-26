@@ -6,5 +6,6 @@ class NappyColors {
   static const Color primaryFillText = Color(0xFFB29696);
   static const Color selectionColor = Color.fromARGB(255, 255, 193, 193);
   static const Color selectionHandle = Color.fromARGB(255, 255, 92, 92);
-  static const Color mutedText = Color(0xFFCBD4D8);
+  static const Color mutedText = Color.fromARGB(255, 169, 179, 183);
+  static const Color dark = Color.fromRGBO(53, 57, 59, 1);
 }

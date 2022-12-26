@@ -24,7 +24,7 @@ class Nappy extends StatelessWidget {
         primaryIconTheme: kPrimaryIconTheme,
         iconTheme: kPrimaryIconTheme,
         fontFamily: kPoppinsFont,
-        textTheme: const TextTheme(
+        textTheme: TextTheme(
           headline1: kHeadline1,
           subtitle1: kSubtitle1,
           bodyText1: kBodyText1,

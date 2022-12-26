@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 
-const TextStyle kHeadline1 = TextStyle(
+TextStyle kHeadline1 = GoogleFonts.raleway().copyWith(
   fontSize: 24,
   color: NappyColors.primary,
   fontWeight: FontWeight.w500,
 );
+//TextStyle kHeadline1 = TextStyle();
 
-const TextStyle kSubtitle1 = TextStyle(
+TextStyle kSubtitle1 = GoogleFonts.raleway().copyWith(
   fontSize: 16,
   color: NappyColors.primaryFillText,
 );
-
-const TextStyle kBodyText1 = TextStyle(
+TextStyle kBodyText1 = GoogleFonts.raleway().copyWith(
   fontSize: 16,
   color: NappyColors.primary,
   fontWeight: FontWeight.normal,
 );
 
-InputDecorationTheme kPrimaryInputDecorationTheme = const InputDecorationTheme(
+InputDecorationTheme kPrimaryInputDecorationTheme = InputDecorationTheme(
   fillColor: NappyColors.primaryFill,
   filled: true,
   border: InputBorder.none,

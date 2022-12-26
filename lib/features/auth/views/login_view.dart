@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nappy_mobile/constants/assets.dart';
-import 'package:nappy_mobile/constants/breakpoints.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/responsive.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
 import 'package:nappy_mobile/widgets/visibility_textfield.dart';
 
 class LoginView extends ConsumerWidget {
-  const LoginView({super.key});
+  const LoginView({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,90 +17,135 @@ class LoginView extends ConsumerWidget {
       resizeToAvoidBottomInset: false, // Prevent TextField resizing widgets
       body: SafeArea(
         child: Center(
-          child: LoginBody(),
+          child: Row(
+            children: [
+              if (Responsive.isTabletOrGreater(context, offset: 200)) ...{
+                const Expanded(
+                  child: _SidePanel(),
+                )
+              },
+              Expanded(
+                flex: Responsive.isMediumScreen(context) ? 2 : 1,
+                child: const _MobileLayout(),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class LoginBody extends ConsumerWidget {
-  const LoginBody({super.key});
+class _MobileLayout extends ConsumerWidget {
+  const _MobileLayout();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    return SizedBox(
-      width: 400,
-      child: ListView(
-        padding: isMobile(context) ? kMobilePadding : EdgeInsets.zero,
-        shrinkWrap: true,
-        children: [
-          const SizedBox(
-            height: 30,
+    final double width = MediaQuery.of(context).size.width;
+    final margin = Responsive.isSmallScreen(context) ? 40.0 : width * 0.1;
+    return ListView(
+      shrinkWrap: true,
+      padding: EdgeInsets.symmetric(horizontal: margin),
+      children: [
+        const SizedBox(
+          height: 30,
+        ),
+        Text("Sign in", style: textTheme.headline1),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(
+          "Please fill in the credentials",
+          style: textTheme.subtitle1!.copyWith(
+            color: NappyColors.mutedText,
           ),
-          Text("Sign in", style: textTheme.headline1),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            "Please fill in the credentials",
-            style: textTheme.subtitle1!.copyWith(
-              color: NappyColors.mutedText,
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.email_outlined,
-                color: theme.iconTheme.color,
-              ),
-              hintText: "Enter your email address",
-            ),
-          ),
-          kTextFieldGap,
-          VisibilityTextField(
-            hintText: "Enter your password",
+        ),
+        const SizedBox(
+          height: 40,
+        ),
+        TextFormField(
+          decoration: InputDecoration(
             prefixIcon: Icon(
-              Icons.lock_outline,
+              Icons.email_outlined,
               color: theme.iconTheme.color,
             ),
+            hintText: "Enter your email address",
           ),
-          kTextFieldGap,
-          Align(
-            alignment: Alignment.topRight,
-            child: Text(
-              "Forgot password?",
-              style: textTheme.bodyText1,
+        ),
+        kTextFieldGap,
+        VisibilityTextField(
+          hintText: "Enter your password",
+          prefixIcon: Icon(
+            Icons.lock_outline,
+            color: theme.iconTheme.color,
+          ),
+        ),
+        kTextFieldGap,
+        Align(
+          alignment: Alignment.topRight,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: () {},
+              child: Text(
+                "Forgot password?",
+                style: textTheme.bodyText1,
+              ),
             ),
           ),
-          kDefaultMargin,
-          PrimaryButton(
-            onPressed: () {},
-            child: Text("Sign in"),
-          ),
-          kDefaultMargin,
-          Row(
-            children: [
-              Text(
-                "Not a member yet?",
-                style: textTheme.subtitle1,
+        ),
+        kDefaultMargin,
+        PrimaryButton(
+          onPressed: () {},
+          child: Text("Sign in"),
+        ),
+        kDefaultMargin,
+        Row(
+          children: [
+            Text(
+              "Not a member yet?",
+              style: textTheme.subtitle1,
+            ),
+            const Spacer(),
+            MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {},
+                child: Text(
+                  "Sign Up",
+                  style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
+                ),
               ),
-              const Spacer(),
-              Text(
-                "Sign Up",
-                style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
-              ),
-            ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _SidePanel extends StatelessWidget {
+  const _SidePanel();
+
+  @override
+  Widget build(BuildContext context) {
+    final double height = MediaQuery.of(context).size.height;
+    return Container(
+      height: height,
+      color: const Color.fromARGB(255, 255, 149, 149),
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: SelectableText(
+            "Welcome to Nappy",
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(fontSize: 40, color: Colors.white, fontWeight: FontWeight.bold),
           ),
-          SvgPicture.asset(
-            kWaveSvgPath,
-          ),
-        ],
+        ),
       ),
     );
   }

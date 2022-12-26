@@ -17,7 +17,7 @@ class VisibilityTextField extends StatefulWidget {
 }
 
 class _VisibilityTextFieldState extends State<VisibilityTextField> {
-  bool obscureText = false;
+  bool obscureText = true;
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
