@@ -17,19 +17,7 @@ class LoginView extends ConsumerWidget {
       resizeToAvoidBottomInset: false, // Prevent TextField resizing widgets
       body: SafeArea(
         child: Center(
-          child: Column(
-            children: [
-              const Expanded(
-                flex: 4,
-                child: LoginBody(),
-              ),
-              const Spacer(),
-              SvgPicture.asset(
-                kWaveSvgPath,
-                width: MediaQuery.of(context).size.width,
-              ),
-            ],
-          ),
+          child: LoginBody(),
         ),
       ),
     );
@@ -46,7 +34,6 @@ class LoginBody extends ConsumerWidget {
     return SizedBox(
       width: 400,
       child: ListView(
-        
         padding: isMobile(context) ? kMobilePadding : EdgeInsets.zero,
         shrinkWrap: true,
         children: [
@@ -109,7 +96,10 @@ class LoginBody extends ConsumerWidget {
                 style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
               ),
             ],
-          )
+          ),
+          SvgPicture.asset(
+            kWaveSvgPath,
+          ),
         ],
       ),
     );
