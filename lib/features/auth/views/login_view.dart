@@ -57,7 +57,7 @@ class _MobileLayout extends ConsumerWidget {
           height: 10,
         ),
         Text(
-          "Please fill in the credentials",
+          "Please fill in the credentials", 
           style: textTheme.subtitle1!.copyWith(
             color: NappyColors.mutedText,
           ),

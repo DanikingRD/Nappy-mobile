@@ -7,19 +7,24 @@
     {
       "name": "Nappy Development",
       "request": "launch",
-      "type": "dart"
+      "type": "dart",
+      "program": "lib/init/main_dev.dart",
+      "flutterMode": "debug"
     },
     {
-      "name": "nappy_mobile (profile mode)",
+      "name": "Nappy Debugging",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "profile"
+      "program": "lib/init/main_debug.dart",
+      "flutterMode": "debug"
     },
     {
-      "name": "nappy_mobile (release mode)",
+      "name": "Nappy Testing",
       "request": "launch",
       "type": "dart",
-      "flutterMode": "release"
+      "program": "lib/init/main_testing.dart",
+      "flutterMode": "release",
+      "preLaunchTask": "TestRunner",
     }
   ]
 }
