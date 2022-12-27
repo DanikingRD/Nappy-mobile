@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
-import 'package:nappy_mobile/responsive.dart';
+import 'package:nappy_mobile/util/responsive.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
 import 'package:nappy_mobile/widgets/visibility_textfield.dart';
 
@@ -57,7 +57,7 @@ class _MobileLayout extends ConsumerWidget {
           height: 10,
         ),
         Text(
-          "Please fill in the credentials", 
+          "Please fill in the credentials",
           style: textTheme.subtitle1!.copyWith(
             color: NappyColors.mutedText,
           ),
