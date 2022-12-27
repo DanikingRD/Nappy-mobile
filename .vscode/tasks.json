@@ -19,7 +19,7 @@
     },
     {
       "label": "WebRunner - Testing",
-      "command": "flutter run lib/init/main_testing.dart -d web-server",
+      "command": "flutter run lib/init/main_testing.dart -d web-server --release",
       "type": "shell",
       "group": "build"
     },

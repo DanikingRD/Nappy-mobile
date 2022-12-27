@@ -6,6 +6,7 @@ import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/widgets/dialog_box.dart';
 import 'package:nappy_mobile/widgets/external_auth_button.dart';
 import 'package:nappy_mobile/widgets/external_auth_divider.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
@@ -104,7 +105,20 @@ class _MobileLayout extends ConsumerWidget {
         ),
         kDefaultMargin,
         PrimaryButton(
-          onPressed: () {},
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return DialogBox(
+                  title: "This is raised default dialog",
+                  content:
+                      "Lo text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                  continueHandle: () {},
+                  continueText: "Continue",
+                );
+              },
+            );
+          },
           text: "Sign in",
         ),
         kDefaultMargin,

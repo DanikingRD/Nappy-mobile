@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/constants/assets.dart';
+import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/styles.dart';
 import 'package:nappy_mobile/router.dart';
 import 'package:routemaster/routemaster.dart';
@@ -19,6 +20,9 @@ class Nappy extends StatelessWidget {
         routesBuilder: (context) => publicRoutes,
       ),
       theme: ThemeData(
+        colorScheme: const ColorScheme.light(
+          primary: NappyColors.primary,
+        ),
         inputDecorationTheme: kPrimaryInputDecorationTheme,
         scaffoldBackgroundColor: Colors.white,
         primaryIconTheme: kPrimaryIconTheme,
