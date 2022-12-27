@@ -2,12 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:logger/logger.dart';
 import 'package:nappy_mobile/config.dart';
 import 'package:nappy_mobile/nappy.dart';
-import 'package:nappy_mobile/util/nappy_logger.dart';
+import 'package:nappy_mobile/util/logger.dart';
 
-final Logger logger = NappyLogger.getLogger("init");
+final NappyLogger logger = NappyLogger.getLogger("init");
 const String appName = "Nappy";
 // This is why I use [Unit] instead of `void`:
 // (https://medium.com/flutter-community/the-curious-case-of-void-in-dart-f0535705e529)
@@ -24,6 +23,9 @@ Future<Unit> run(EnvType env) async {
   // TODO: init firebase
   runApp(
     const ProviderScope(
+      observers: [
+        NappyProviderObserver(),
+      ],
       child: Nappy(),
     ),
   );

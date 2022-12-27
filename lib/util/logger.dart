@@ -1,22 +1,39 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nappy_mobile/config.dart';
 
-class NappyLogger {
-  const NappyLogger._();
+class NappyLogger extends Logger {
+  NappyLogger._({
+    required LogPrinter printer,
+    required Level level,
+  }) : super(printer: printer, level: level);
 
-  static Logger getLogger(String className) {
+  static NappyLogger getLogger(String className) {
     final Level level;
     if (NappyConfig.isDebugging) {
       level = Level.debug;
     } else {
       level = Level.info;
     }
-    return Logger(
+    return NappyLogger._(
       printer: NappyLoggerPrinter(
         className: className,
       ),
       level: level,
     );
+  }
+}
+
+class NappyProviderObserver extends ProviderObserver {
+  const NappyProviderObserver() : super();
+  @override
+  void didUpdateProvider(
+    ProviderBase provider,
+    Object? previousValue,
+    Object? newValue,
+    ProviderContainer container,
+  ) {
+    NappyLogger.getLogger(provider.name ?? 'provider').d('New State: $newValue');
   }
 }
 

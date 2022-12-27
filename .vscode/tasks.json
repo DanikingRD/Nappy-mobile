@@ -10,6 +10,24 @@
         "reveal": "always"
       },
       "group": "build"
+    },
+    {
+      "label": "WebRunner - Dev",
+      "command": "flutter run lib/init/main_dev.dart -d web-server",
+      "type": "shell",
+      "group": "build"
+    },
+    {
+      "label": "WebRunner - Testing",
+      "command": "flutter run lib/init/main_testing.dart -d web-server",
+      "type": "shell",
+      "group": "build"
+    },
+    {
+      "label": "WebRunner - Debugging",
+      "command": "flutter run lib/init/main_debug.dart -d web-server",
+      "type": "shell",
+      "group": "build"
     }
   ]
 }
