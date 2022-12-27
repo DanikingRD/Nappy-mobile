@@ -1,9 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_backend_utils/flutter_backend_utils.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nappy_mobile/global_providers.dart';
 
+final authRepositoryProvider = Provider<IAuthRepository>((ref) {
+  final auth = ref.read(authProvider);
+  final google = ref.read(googleProvider);
+  return NappyAuthRepository(auth, google);
+});
 
 class NappyAuthRepository implements IAuthRepository {
   final FirebaseAuth _firebaseAuth;
@@ -66,8 +74,28 @@ class NappyAuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthError, Unit>> signInWithGoogle() {
-    // TODO: implement signInWithGoogle
-    throw UnimplementedError();
+  Future<Either<AuthError, Unit>> signInWithGoogle() async {
+    try {
+      final UserCredential credential;
+      if (kIsWeb) {
+        // Web
+        final googleProvider = GoogleAuthProvider();
+        googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        credential = await _firebaseAuth.signInWithPopup(googleProvider);
+      } else {
+        // Mobile
+        final GoogleSignInAccount? acc = await _googleAuth.signIn();
+        final auth = await acc?.authentication;
+        final googleCredential = GoogleAuthProvider.credential(
+          accessToken: auth?.accessToken,
+          idToken: auth?.idToken,
+        );
+        credential = await _firebaseAuth.signInWithCredential(googleCredential);
+      }
+
+      return Either.of(unit);
+    } catch (e) {
+      return left(AuthError.serverError);
+    }
   }
 }

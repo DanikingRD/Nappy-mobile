@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1077617993688",
+    "project_id": "nappybackend",
+    "storage_bucket": "nappybackend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1077617993688:android:99092698c7d3ee55c5f4ad",
+        "android_client_info": {
+          "package_name": "com.nappy.cards"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1077617993688-br2igk0ibsti110tlqltvcj6devecn0t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nappy.cards",
+            "certificate_hash": "73031cd4ba9f96eaa3416bd65e7e3964b60815a9"
+          }
+        },
+        {
+          "client_id": "1077617993688-5hvup6lckc6a0urigkto3nf9tbbdgg0r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvcf2N0ee-8HmGIUw-KBHgUBmtf1C9SNA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1077617993688-5hvup6lckc6a0urigkto3nf9tbbdgg0r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

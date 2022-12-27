@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/styles.dart';
-import 'package:nappy_mobile/features/auth/views/login_view.dart';
+import 'package:nappy_mobile/router.dart';
+import 'package:routemaster/routemaster.dart';
 
 class Nappy extends StatelessWidget {
   const Nappy({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const ScrollConfiguration(
-        behavior: ExtendedScrollBehaviour(),
-        child: LoginView(),
+    return MaterialApp.router(
+      // home: const ScrollConfiguration(
+      //   behavior: ExtendedScrollBehaviour(),
+      //   child: LoginView(),
+      // ),
+      routeInformationParser: const RoutemasterParser(),
+      routerDelegate: RoutemasterDelegate(
+        routesBuilder: (context) => publicRoutes,
       ),
       theme: ThemeData(
         inputDecorationTheme: kPrimaryInputDecorationTheme,

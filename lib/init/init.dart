@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/config.dart';
+import 'package:nappy_mobile/firebase_options.dart';
 import 'package:nappy_mobile/nappy.dart';
 import 'package:nappy_mobile/util/logger.dart';
 
@@ -20,7 +22,7 @@ Future<Unit> run(EnvType env) async {
       DeviceOrientation.portraitDown,
     ],
   );
-  // TODO: init firebase
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(
     const ProviderScope(
       observers: [

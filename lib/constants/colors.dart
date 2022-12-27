@@ -8,4 +8,6 @@ class NappyColors {
   static const Color selectionHandle = Color.fromARGB(255, 255, 92, 92);
   static const Color mutedText = Color.fromARGB(255, 169, 179, 183);
   static const Color dark = Color.fromRGBO(53, 57, 59, 1);
+  static const Color divider = Color.fromARGB(255, 125, 125, 125);
+  static const Color landing = Color.fromARGB(255, 255, 160, 160);
 }

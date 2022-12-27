@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nappy_mobile/auth_repository.dart';
+import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/widgets/external_auth_button.dart';
+import 'package:nappy_mobile/widgets/external_auth_divider.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
 import 'package:nappy_mobile/widgets/visibility_textfield.dart';
 
@@ -73,6 +78,7 @@ class _MobileLayout extends ConsumerWidget {
             ),
             hintText: "Enter your email address",
           ),
+          keyboardType: TextInputType.emailAddress,
         ),
         kTextFieldGap,
         VisibilityTextField(
@@ -99,7 +105,17 @@ class _MobileLayout extends ConsumerWidget {
         kDefaultMargin,
         PrimaryButton(
           onPressed: () {},
-          child: Text("Sign in"),
+          text: "Sign in",
+        ),
+        kDefaultMargin,
+        const ExternalAuthDivider("Or"),
+        kDefaultMargin,
+        ExternalAuthButton(
+          onClick: () async {
+            await ref.read(loginControllerProvider.notifier).signInWithGoogle();
+          },
+          logoPath: kGoogleImgPath,
+          title: "Continue With Google",
         ),
         kDefaultMargin,
         Row(
@@ -134,7 +150,7 @@ class _SidePanel extends StatelessWidget {
     final double height = MediaQuery.of(context).size.height;
     return Container(
       height: height,
-      color: const Color.fromARGB(255, 255, 149, 149),
+      color: NappyColors.landing,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
