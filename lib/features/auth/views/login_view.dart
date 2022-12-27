@@ -51,6 +51,7 @@ class _MobileLayout extends ConsumerWidget {
     final textTheme = theme.textTheme;
     final double width = MediaQuery.of(context).size.width;
     final margin = Responsive.isSmallScreen(context) ? 40.0 : width * 0.1;
+    final controller = ref.watch(loginControllerProvider);
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(horizontal: margin),
@@ -79,6 +80,9 @@ class _MobileLayout extends ConsumerWidget {
             ),
             hintText: "Enter your email address",
           ),
+          onChanged: (String? e) {
+            ref.read(loginControllerProvider.notifier).onEmailUpdate(e);
+          },
           keyboardType: TextInputType.emailAddress,
         ),
         kTextFieldGap,
@@ -88,6 +92,9 @@ class _MobileLayout extends ConsumerWidget {
             Icons.lock_outline,
             color: theme.iconTheme.color,
           ),
+          onChanged: (String? pw) {
+            ref.read(loginControllerProvider.notifier).onPasswordUpdate(pw);
+          },
         ),
         kTextFieldGap,
         Align(
@@ -105,19 +112,8 @@ class _MobileLayout extends ConsumerWidget {
         ),
         kDefaultMargin,
         PrimaryButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return DialogBox(
-                  title: "This is raised default dialog",
-                  content:
-                      "Lo text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                  continueHandle: () {},
-                  continueText: "Continue",
-                );
-              },
-            );
+          onPressed: () async {
+            await ref.read(loginControllerProvider.notifier).register(context);
           },
           text: "Sign in",
         ),
@@ -125,9 +121,7 @@ class _MobileLayout extends ConsumerWidget {
         const ExternalAuthDivider("Or"),
         kDefaultMargin,
         ExternalAuthButton(
-          onClick: () async {
-            await ref.read(loginControllerProvider.notifier).signInWithGoogle();
-          },
+          onClick: () async {},
           logoPath: kGoogleImgPath,
           title: "Continue With Google",
         ),

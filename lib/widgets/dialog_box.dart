@@ -5,8 +5,8 @@ import 'package:nappy_mobile/util/responsive.dart';
 
 enum DialogType {
   info,
-  warning,
   error,
+  success,
 }
 
 class DialogBox extends StatelessWidget {
@@ -28,8 +28,8 @@ class DialogBox extends StatelessWidget {
 
   static const Map<DialogType, Color> _colorMap = {
     DialogType.info: NappyColors.divider,
-    DialogType.warning: Colors.yellow,
     DialogType.error: NappyColors.danger,
+    DialogType.success: NappyColors.success,
   };
 
   @override
@@ -105,6 +105,26 @@ class DialogBox extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  static void show({
+    required BuildContext context,
+    required String title,
+    required String content,
+    required String continueText,
+    VoidCallback? onContinue,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          title: title,
+          content: content,
+          continueHandle: onContinue ?? () => Navigator.pop(context),
+          continueText: continueText,
+        );
+      },
     );
   }
 }

@@ -4,12 +4,13 @@ class VisibilityTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final String? hintText;
   final TextStyle? hintTextStyle;
-
+  final ValueChanged<String>? onChanged;
   const VisibilityTextField({
     super.key,
     this.prefixIcon,
     this.hintText,
     this.hintTextStyle,
+    this.onChanged,
   });
 
   @override
@@ -30,6 +31,7 @@ class _VisibilityTextFieldState extends State<VisibilityTextField> {
         hoverColor: Colors.transparent,
       ),
       child: TextFormField(
+        onChanged: widget.onChanged,
         obscureText: obscureText,
         decoration: InputDecoration(
           hintText: widget.hintText,

@@ -11,4 +11,5 @@ class NappyColors {
   static const Color divider = Color.fromARGB(255, 125, 125, 125);
   static const Color landing = Color.fromARGB(255, 255, 160, 160);
   static const Color danger = Color.fromARGB(255, 253, 107, 107);
+  static const Color success = Color(0xff48c774);
 }
