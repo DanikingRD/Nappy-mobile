@@ -44,18 +44,20 @@ class ValueHelper {
     required BuildContext context,
     required String? password,
     required NappyLogger logger,
+    bool verification = false,
   }) {
+    final String field = verification ? "Password Verification Field" : "Password Field";
     try {
       return Option.of(PasswordValue(password));
     } on RequiredValueException catch (e) {
       DialogBox.show(
         context: context,
-        title: "Password Field",
+        title: field,
         content: "You haven't entered any password yet. Enter one and try again.",
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: "Password Field");
+      logger.handleDebugLog(code: e.code, desc: e.message, element: field);
       return Option.none();
     } on TooShortValueException catch (e) {
       DialogBox.show(
@@ -65,7 +67,7 @@ class ValueHelper {
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: "Password Field");
+      logger.handleDebugLog(code: e.code, desc: e.message, element: field);
       return Option.none();
     }
   }

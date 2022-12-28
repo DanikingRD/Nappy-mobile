@@ -43,9 +43,25 @@ class SignUpController extends StateNotifier<SignUpForm> {
       password: state.password,
       logger: _logger,
     );
+    final passwordVerification = ValueHelper.handlePassword(
+      context: context,
+      password: state.passwordVerification,
+      logger: _logger,
+      verification: true,
+    );
 
     // Fast return if any of the inputs are invalid
-    if (email.isNone() || password.isNone()) {
+    if (email.isNone() || password.isNone() || passwordVerification.isNone()) {
+      return;
+    }
+    if (password != passwordVerification) {
+      DialogBox.show(
+        context: context,
+        title: "Password Field",
+        content: "Your passwords do not match.",
+        continueText: "Continue",
+        type: NotificationType.error,
+      );
       return;
     }
     if (!state.agreeTerms) {
