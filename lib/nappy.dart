@@ -15,7 +15,7 @@ class Nappy extends ConsumerWidget {
     final authEvents = ref.watch(authStateChangesProvider);
     return authEvents.when(
       data: (optionalId) {
-        return MaterialApp.router(
+        return MaterialApp.router(   
           routeInformationParser: const RoutemasterParser(),
           routerDelegate: RoutemasterDelegate(
             routesBuilder: (context) {
@@ -44,12 +44,10 @@ class Nappy extends ConsumerWidget {
           debugShowCheckedModeBanner: false,
         );
       },
-      error: (error, stack) => Scaffold(
-        body: Center(child: Text(error.toString())),
-      ),
-      loading: () => const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
+      error: (error, stack) => Center(child: Text(error.toString())),
+      loading: () => const Center(
+        child: CircularProgressIndicator(
+          color: NappyColors.primary,
         ),
       ),
     );

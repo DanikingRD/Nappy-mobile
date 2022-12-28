@@ -6,28 +6,48 @@ import 'package:nappy_mobile/auth_repository.dart';
 import 'package:nappy_mobile/exceptions/value_exceptions.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
 import 'package:nappy_mobile/util/auth_interface.dart';
+import 'package:nappy_mobile/util/logger.dart';
 import 'package:nappy_mobile/value/email_address_value.dart';
 import 'package:nappy_mobile/value/password_value.dart';
 import 'package:nappy_mobile/widgets/dialog_box.dart';
 
-final authControllerProvider = StateNotifierProvider<AuthController, AuthForm>((ref) {
-  return AuthController(repository: ref.read(authRepositoryProvider));
-});
+final authControllerProvider = StateNotifierProvider<AuthController, AuthForm>(
+  (ref) {
+    return AuthController(
+        repository: ref.read(authRepositoryProvider),
+        logger: NappyLogger.getLogger((AuthController).toString()));
+  },
+  name: (AuthController).toString(),
+);
 
-final authStateChangesProvider = StreamProvider((ref) {
-  return ref.read(authRepositoryProvider).onAuthStateChanged();
-});
+final authStateChangesProvider = StreamProvider(
+  (ref) {
+    return ref.watch(authRepositoryProvider).onAuthStateChanged();
+  },
+  name: 'AuthListener',
+);
 
 class AuthController extends StateNotifier<AuthForm> {
   final IAuthRepository _repository;
+  final NappyLogger _logger;
 
   AuthController({
     required IAuthRepository repository,
+    required NappyLogger logger,
   })  : _repository = repository,
+        _logger = logger,
         super(AuthForm.empty());
 
+  /// Log debugging exceptions
+  void handleDebugLog({
+    required String element,
+    required String code,
+    required String desc,
+  }) {
+    _logger.d('[$element] has thrown exception code [$code]: $desc');
+  }
+
   Option<EmailAddressValue> handleEmail(BuildContext ctx, String? email) {
-    // TODO: log errors
     try {
       return Option.of(EmailAddressValue(email));
     } on RequiredValueException catch (e) {
@@ -38,6 +58,7 @@ class AuthController extends StateNotifier<AuthForm> {
         continueText: "OK",
         type: DialogType.error,
       );
+      handleDebugLog(code: e.code, desc: e.message, element: "Email Field");
       return Option.none();
     } on IllegalValueException catch (e) {
       DialogBox.show(
@@ -47,6 +68,7 @@ class AuthController extends StateNotifier<AuthForm> {
         continueText: "OK",
         type: DialogType.error,
       );
+      handleDebugLog(code: e.code, desc: e.message, element: "Email Field");
       return Option.none();
     }
   }
@@ -62,6 +84,7 @@ class AuthController extends StateNotifier<AuthForm> {
         continueText: "OK",
         type: DialogType.error,
       );
+      handleDebugLog(code: e.code, desc: e.message, element: "Password Field");
       return Option.none();
     } on TooShortValueException catch (e) {
       DialogBox.show(
@@ -71,6 +94,7 @@ class AuthController extends StateNotifier<AuthForm> {
         continueText: "OK",
         type: DialogType.error,
       );
+      handleDebugLog(code: e.code, desc: e.message, element: "Password Field");
       return Option.none();
     }
   }
@@ -83,6 +107,7 @@ class AuthController extends StateNotifier<AuthForm> {
       continueText: "GOT IT",
       type: DialogType.error,
     );
+      handleDebugLog(code: e.code, desc: e.description, element: (AuthController).toString());
   }
 
   void onAuthSuccess(BuildContext context) {
@@ -90,7 +115,7 @@ class AuthController extends StateNotifier<AuthForm> {
       context: context,
       title: "Great!",
       content: "Your account has been created successfully.",
-      continueText: "Start Exploring Nappy",
+      continueText: "Start Exploreing Nappy",
       type: DialogType.success,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
@@ -18,7 +19,6 @@ class LoginView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Prevent TextField resizing widgets
       body: SafeArea(
         child: Center(
           child: Row(
@@ -114,6 +114,7 @@ class _MobileLayout extends ConsumerWidget {
             await ref.read(authControllerProvider.notifier).signIn(context);
           },
           text: "Sign in",
+          loading: controller.loading,
         ),
         kDefaultMargin,
         const ExternalAuthDivider("Or"),

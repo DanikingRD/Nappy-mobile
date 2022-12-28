@@ -84,7 +84,12 @@ class AuthRepositoryImpl implements IAuthRepository {
   @override
   Stream<Option<UserIdentifier>> onAuthStateChanged() {
     final authStates = _firebaseAuth.authStateChanges();
-    //return authStates.map((event) => Option.fromNullable(event!));
-    return authStates.map((event) => Option.none());
+    return authStates.map((event) {
+      if (event == null) {
+        return Option.none();
+      }
+      final id = UserIdentifier(id: event.uid);
+      return Option.of(id);
+    });
   }
 }
