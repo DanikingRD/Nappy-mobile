@@ -11,10 +11,6 @@ class Nappy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      // home: const ScrollConfiguration(
-      //   behavior: ExtendedScrollBehaviour(),
-      //   child: LoginView(),
-      // ),
       routeInformationParser: const RoutemasterParser(),
       routerDelegate: RoutemasterDelegate(
         routesBuilder: (context) => publicRoutes,

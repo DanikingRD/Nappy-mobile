@@ -14,6 +14,10 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthForm>((
   return AuthController(repository: ref.read(authRepositoryProvider));
 });
 
+final authStateChangesProvider = StreamProvider((ref) {
+  return ref.read(authRepositoryProvider).onAuthStateChanged();
+});
+
 class AuthController extends StateNotifier<AuthForm> {
   final IAuthRepository _repository;
 
@@ -91,13 +95,19 @@ class AuthController extends StateNotifier<AuthForm> {
     );
   }
 
-  Future<void> signIn(BuildContext context) async {
+  Future<Unit> signInWithGoogle(BuildContext context) async {
+    final response = await _repository.signInWithGoogle();
+    response.match((AuthError error) => onAuthError(error, context), (_) => onAuthSuccess(context));
+    return unit;
+  }
+
+  Future<Unit> signIn(BuildContext context) async {
     final optionalEmail = handleEmail(context, state.email);
     final optionalPassword = handlePassword(context, state.password);
     if (optionalEmail.isNone()) {
-      return;
+      return unit;
     } else if (optionalPassword.isNone()) {
-      return;
+      return unit;
     }
     final emailVal = optionalEmail.getOrElse(() => throw 'This should not happen');
     final passwordVal = optionalPassword.getOrElse(() => throw 'This is impossible');
@@ -105,15 +115,16 @@ class AuthController extends StateNotifier<AuthForm> {
     final response = await _repository.signIn(email: emailVal, password: passwordVal);
     state = state.copyWith(loading: false);
     response.match((AuthError error) => onAuthError(error, context), (_) => onAuthSuccess(context));
+    return unit;
   }
 
-  Future<void> register(BuildContext context) async {
+  Future<Unit> register(BuildContext context) async {
     final optionalEmail = handleEmail(context, state.email);
     final optionalPassword = handlePassword(context, state.password);
     if (optionalEmail.isNone()) {
-      return;
+      return unit;
     } else if (optionalPassword.isNone()) {
-      return;
+      return unit;
     }
     final emailVal = optionalEmail.getOrElse(() => throw 'This should not happen');
     final passwordVal = optionalPassword.getOrElse(() => throw 'This is impossible');
@@ -121,6 +132,7 @@ class AuthController extends StateNotifier<AuthForm> {
     final response = await _repository.register(email: emailVal, password: passwordVal);
     state = state.copyWith(loading: false);
     response.match((AuthError error) => onAuthError(error, context), (_) => onAuthSuccess(context));
+    return unit;
   }
 
   void onEmailUpdate(String? email) {

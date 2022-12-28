@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nappy_mobile/global_providers.dart';
+import 'package:nappy_mobile/user.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
 import 'package:nappy_mobile/util/auth_interface.dart';
 import 'package:nappy_mobile/value/email_address_value.dart';
@@ -21,7 +23,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   const AuthRepositoryImpl(this._firebaseAuth, this._googleAuth);
 
   @override
-  Future<Either<AuthError, void>> register({
+  Future<Either<AuthError, Unit>> register({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
@@ -31,14 +33,14 @@ class AuthRepositoryImpl implements IAuthRepository {
         password: password.value,
       );
 
-      return right(null);
+      return right(unit);
     } on FirebaseAuthException catch (e) {
       return left(AuthErrorHelper.getByCode(e.code));
     }
   }
 
   @override
-  Future<Either<AuthError, void>> signIn({
+  Future<Either<AuthError, Unit>> signIn({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
@@ -48,9 +50,41 @@ class AuthRepositoryImpl implements IAuthRepository {
         password: password.value,
       );
 
-      return right(null);
+      return right(unit);
     } on FirebaseAuthException catch (e) {
       return left(AuthErrorHelper.getByCode(e.code));
     }
+  }
+
+  @override
+  Future<Either<AuthError, Unit>> signInWithGoogle() async {
+    try {
+      if (kIsWeb) {
+        final provider = GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        await _firebaseAuth.signInWithPopup(provider);
+        return right(unit);
+      } else {
+        final user = await _googleAuth.signIn();
+        final auth = await user?.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: auth?.accessToken,
+          idToken: auth?.idToken,
+        );
+        final userCredential = _firebaseAuth.signInWithCredential(credential);
+        return right(unit);
+      }
+    } on FirebaseException catch (e) {
+      return left(AuthErrorHelper.getByCode(e.code));
+    } catch (e) {
+      return left(AuthError.serverError);
+    }
+  }
+
+  @override
+  Stream<Option<UserIdentifier>> onAuthStateChanged() {
+    final authStates = _firebaseAuth.authStateChanges();
+    //return authStates.map((event) => Option.fromNullable(event!));
+    return authStates.map((event) => Option.none());
   }
 }

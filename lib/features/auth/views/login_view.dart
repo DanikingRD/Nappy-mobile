@@ -119,7 +119,9 @@ class _MobileLayout extends ConsumerWidget {
         const ExternalAuthDivider("Or"),
         kDefaultMargin,
         ExternalAuthButton(
-          onClick: () async {},
+          onClick: () async {
+            await ref.read(authControllerProvider.notifier).signInWithGoogle(context);
+          },
           logoPath: kGoogleImgPath,
           title: "Continue With Google",
         ),
