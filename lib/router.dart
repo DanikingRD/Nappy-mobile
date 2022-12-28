@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/features/auth/views/login_view.dart';
+import 'package:nappy_mobile/features/auth/views/auth_view.dart';
+import 'package:nappy_mobile/features/auth/views/pages/login_page.dart';
 import 'package:nappy_mobile/features/home/views/home_view.dart';
 import 'package:nappy_mobile/nappy.dart';
 import 'package:routemaster/routemaster.dart';
 
 final publicRoutes = RouteMap(
   routes: {
-    '/': (_) => const MaterialPage(child: ExtendedScrollWidget(LoginView())),
+    '/': (_) => const MaterialPage(child: ExtendedScrollWidget(AuthView())),
   },
 );
 

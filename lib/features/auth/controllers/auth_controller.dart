@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/auth_form.dart';
 import 'package:nappy_mobile/auth_repository.dart';
 import 'package:nappy_mobile/exceptions/value_exceptions.dart';
+import 'package:nappy_mobile/features/auth/state/auth_form.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
 import 'package:nappy_mobile/util/auth_interface.dart';
 import 'package:nappy_mobile/util/logger.dart';
@@ -11,11 +11,12 @@ import 'package:nappy_mobile/value/email_address_value.dart';
 import 'package:nappy_mobile/value/password_value.dart';
 import 'package:nappy_mobile/widgets/dialog_box.dart';
 
-final authControllerProvider = StateNotifierProvider<AuthController, AuthForm>(
+final formControllerProvider = StateNotifierProvider<AuthController, AuthForm>(
   (ref) {
     return AuthController(
-        repository: ref.read(authRepositoryProvider),
-        logger: NappyLogger.getLogger((AuthController).toString()));
+      authService: ref.read(authRepositoryProvider),
+      logger: NappyLogger.getLogger((AuthController).toString()),
+    );
   },
   name: (AuthController).toString(),
 );
@@ -32,9 +33,9 @@ class AuthController extends StateNotifier<AuthForm> {
   final NappyLogger _logger;
 
   AuthController({
-    required IAuthRepository repository,
+    required IAuthRepository authService,
     required NappyLogger logger,
-  })  : _repository = repository,
+  })  : _repository = authService,
         _logger = logger,
         super(AuthForm.empty());
 
@@ -99,7 +100,20 @@ class AuthController extends StateNotifier<AuthForm> {
     }
   }
 
-  void onAuthError(AuthError e, BuildContext ctx) {
+  Future<Unit> signInWithGoogle(BuildContext context) async {
+    final response = await _repository.signInWithGoogle();
+    response.match((AuthError error) => onAuthError(error, context), (_) => onAuthSuccess(context));
+    return unit;
+  }
+
+  Future<Unit> signIn(BuildContext context) async {
+    final optionalEmail = handleEmail(context, state.email);
+    final optionalPassword = handlePassword(context, state.password);
+    if (optionalEmail.isNone()) {
+      return unit;
+    } else if (optionalPassword.isNone()) {
+      return unit;
+    }  void onAuthError(AuthError e, BuildContext ctx) {
     DialogBox.show(
       context: ctx,
       title: e.title,
@@ -120,20 +134,6 @@ class AuthController extends StateNotifier<AuthForm> {
     );
   }
 
-  Future<Unit> signInWithGoogle(BuildContext context) async {
-    final response = await _repository.signInWithGoogle();
-    response.match((AuthError error) => onAuthError(error, context), (_) => onAuthSuccess(context));
-    return unit;
-  }
-
-  Future<Unit> signIn(BuildContext context) async {
-    final optionalEmail = handleEmail(context, state.email);
-    final optionalPassword = handlePassword(context, state.password);
-    if (optionalEmail.isNone()) {
-      return unit;
-    } else if (optionalPassword.isNone()) {
-      return unit;
-    }
     final emailVal = optionalEmail.getOrElse(() => throw 'This should not happen');
     final passwordVal = optionalPassword.getOrElse(() => throw 'This is impossible');
     state = state.copyWith(loading: true);
@@ -166,5 +166,26 @@ class AuthController extends StateNotifier<AuthForm> {
 
   void onPasswordUpdate(String? pw) {
     state = state.copyWith(password: pw);
+  }
+
+  void onAuthError(AuthError e, BuildContext ctx) {
+    DialogBox.show(
+      context: ctx,
+      title: e.title,
+      content: e.description,
+      continueText: "GOT IT",
+      type: DialogType.error,
+    );
+    handleDebugLog(code: e.code, desc: e.description, element: (AuthController).toString());
+  }
+
+  void onAuthSuccess(BuildContext context) {
+    DialogBox.show(
+      context: context,
+      title: "Great!",
+      content: "Your account has been created successfully.",
+      continueText: "Start Exploreing Nappy",
+      type: DialogType.success,
+    );
   }
 }
