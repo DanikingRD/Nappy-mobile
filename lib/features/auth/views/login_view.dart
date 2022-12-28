@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/auth_repository.dart';
 import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
-import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
+import 'package:nappy_mobile/features/auth/controllers/auth_controller.dart';
 import 'package:nappy_mobile/util/responsive.dart';
-import 'package:nappy_mobile/widgets/dialog_box.dart';
 import 'package:nappy_mobile/widgets/external_auth_button.dart';
 import 'package:nappy_mobile/widgets/external_auth_divider.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
@@ -51,7 +49,7 @@ class _MobileLayout extends ConsumerWidget {
     final textTheme = theme.textTheme;
     final double width = MediaQuery.of(context).size.width;
     final margin = Responsive.isSmallScreen(context) ? 40.0 : width * 0.1;
-    final controller = ref.watch(loginControllerProvider);
+    final controller = ref.watch(authControllerProvider);
     return ListView(
       shrinkWrap: true,
       padding: EdgeInsets.symmetric(horizontal: margin),
@@ -81,7 +79,7 @@ class _MobileLayout extends ConsumerWidget {
             hintText: "Enter your email address",
           ),
           onChanged: (String? e) {
-            ref.read(loginControllerProvider.notifier).onEmailUpdate(e);
+            ref.read(authControllerProvider.notifier).onEmailUpdate(e);
           },
           keyboardType: TextInputType.emailAddress,
         ),
@@ -93,7 +91,7 @@ class _MobileLayout extends ConsumerWidget {
             color: theme.iconTheme.color,
           ),
           onChanged: (String? pw) {
-            ref.read(loginControllerProvider.notifier).onPasswordUpdate(pw);
+            ref.read(authControllerProvider.notifier).onPasswordUpdate(pw);
           },
         ),
         kTextFieldGap,
@@ -113,7 +111,7 @@ class _MobileLayout extends ConsumerWidget {
         kDefaultMargin,
         PrimaryButton(
           onPressed: () async {
-            await ref.read(loginControllerProvider.notifier).register(context);
+            await ref.read(authControllerProvider.notifier).signIn(context);
           },
           text: "Sign in",
         ),

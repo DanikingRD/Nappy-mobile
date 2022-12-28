@@ -114,11 +114,13 @@ class DialogBox extends StatelessWidget {
     required String content,
     required String continueText,
     VoidCallback? onContinue,
+    required DialogType type,
   }) {
     showDialog(
       context: context,
       builder: (context) {
         return DialogBox(
+          type: type,
           title: title,
           content: content,
           continueHandle: onContinue ?? () => Navigator.pop(context),

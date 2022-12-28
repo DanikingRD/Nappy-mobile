@@ -11,6 +11,11 @@ abstract class IAuthRepository {
     required PasswordValue password,
   });
 
+  Future<Either<AuthError, void>> signIn({
+    required EmailAddressValue email,
+    required PasswordValue password,
+  });
+
   // Future<Either<AuthError, Unit>> registerWithEmail({
   //   required EmailAddressValue email,
   //   required PasswordValue password,
