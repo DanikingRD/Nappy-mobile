@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/features/auth/state/auth_page.dart';
+import 'package:nappy_mobile/features/auth/states/auth_page.dart';
 
 final authPageControllerProvider = StateNotifierProvider<AuthPageController, AuthPage>((ref) {
   return AuthPageController();

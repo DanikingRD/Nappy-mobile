@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/util/notification.dart';
 import 'package:nappy_mobile/util/responsive.dart';
-
-enum DialogType {
-  info,
-  error,
-  success,
-}
 
 class DialogBox extends StatelessWidget {
   final String title;
@@ -15,7 +10,7 @@ class DialogBox extends StatelessWidget {
   final ButtonStyleButton? cancelHandle;
   final VoidCallback continueHandle;
   final String continueText;
-  final DialogType type;
+  final NotificationType type;
   const DialogBox({
     super.key,
     required this.title,
@@ -23,19 +18,13 @@ class DialogBox extends StatelessWidget {
     this.cancelHandle,
     required this.continueHandle,
     required this.continueText,
-    this.type = DialogType.error,
+    this.type = NotificationType.error,
   });
-
-  static const Map<DialogType, Color> _colorMap = {
-    DialogType.info: NappyColors.divider,
-    DialogType.error: NappyColors.danger,
-    DialogType.success: NappyColors.success,
-  };
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final color = _colorMap[type]!;
+    final color = NappyColors.notificationColorMap[type]!;
     final isMobile = Responsive.isSmallScreen(context);
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20),
@@ -71,7 +60,7 @@ class DialogBox extends StatelessWidget {
                         title,
                         style: textTheme.headline1!.copyWith(
                           fontSize: isMobile ? 20 : 22,
-                          color: _colorMap[type],
+                          color: NappyColors.notificationColorMap[type],
                         ),
                       ),
                     ],
@@ -114,7 +103,7 @@ class DialogBox extends StatelessWidget {
     required String content,
     required String continueText,
     VoidCallback? onContinue,
-    required DialogType type,
+    required NotificationType type,
   }) {
     showDialog(
       context: context,

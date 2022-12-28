@@ -1,56 +1,37 @@
 import 'package:flutter/cupertino.dart';
 
 @immutable
-class AuthForm {
+class LoginForm {
   final String? email;
   final String? password;
   final bool loading;
-  const AuthForm({
+  const LoginForm({
     required this.email,
     required this.password,
     required this.loading,
   });
 
-  factory AuthForm.empty() {
-    return const AuthForm(
+  factory LoginForm.empty() {
+    return const LoginForm(
       email: '',
       password: '',
       loading: false,
     );
   }
-  AuthForm copyWith({
+  LoginForm copyWith({
     String? email,
     String? password,
     bool? loading,
   }) {
-    return AuthForm(
+    return LoginForm(
       email: email ?? this.email,
       password: password ?? this.password,
       loading: loading ?? this.loading,
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'email': email,
-      'password': password,
-      'loading': loading,
-    };
-  }
-
-  factory AuthForm.fromMap(Map<String, dynamic> map) {
-    return AuthForm(
-      email: map['email'] as String,
-      password: map['password'] as String,
-      loading: map['loading'] as bool,
-    );
-  }
-
+  
   @override
-  String toString() => 'AuthView(email: $email, password: $password, loading: $loading)';
-
-  @override
-  bool operator ==(covariant AuthForm other) {
+  bool operator ==(covariant LoginForm other) {
     if (identical(this, other)) return true;
 
     return other.email == email && other.password == password && other.loading == loading;
@@ -58,4 +39,7 @@ class AuthForm {
 
   @override
   int get hashCode => email.hashCode ^ password.hashCode ^ loading.hashCode;
+
+  @override
+  String toString() => 'LoginForm(email: $email, password: $password, loading: $loading)';
 }

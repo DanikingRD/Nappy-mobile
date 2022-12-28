@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/styles.dart';
-import 'package:nappy_mobile/features/auth/controllers/auth_controller.dart';
 import 'package:nappy_mobile/router.dart';
+import 'package:nappy_mobile/services/auth_service.dart';
 import 'package:routemaster/routemaster.dart';
 
 class Nappy extends ConsumerWidget {
@@ -15,7 +15,7 @@ class Nappy extends ConsumerWidget {
     final authEvents = ref.watch(authStateChangesProvider);
     return authEvents.when(
       data: (optionalId) {
-        return MaterialApp.router(   
+        return MaterialApp.router(
           routeInformationParser: const RoutemasterParser(),
           routerDelegate: RoutemasterDelegate(
             routesBuilder: (context) {
@@ -29,6 +29,7 @@ class Nappy extends ConsumerWidget {
             colorScheme: const ColorScheme.light(
               primary: NappyColors.primary,
             ),
+            checkboxTheme: kPrimaryCheckboxTheme,
             inputDecorationTheme: kPrimaryInputDecorationTheme,
             scaffoldBackgroundColor: Colors.white,
             primaryIconTheme: kPrimaryIconTheme,

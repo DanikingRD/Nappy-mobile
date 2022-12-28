@@ -1,6 +1,14 @@
 import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
+import 'package:nappy_mobile/util/notification.dart';
 
 class NappyColors {
+  static const Map<NotificationType, Color> notificationColorMap = {
+    NotificationType.info: NappyColors.info,
+    NotificationType.error: NappyColors.danger,
+    NotificationType.success: NappyColors.success,
+  };
+
   static const Color primary = Color(0xFFFB7B7B);
   static const Color primaryFill = Color(0xFFFCF3F3);
   static const Color primaryFillText = Color(0xFFB29696);
@@ -12,4 +20,5 @@ class NappyColors {
   static const Color landing = Color.fromARGB(255, 255, 160, 160);
   static const Color danger = Color.fromARGB(255, 253, 107, 107);
   static const Color success = Color(0xff48c774);
+  static const Color info = Color(0xFF64B5F6);
 }

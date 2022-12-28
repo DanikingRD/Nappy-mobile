@@ -1,27 +1,127 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/constants/ui.dart';
 import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
+import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
+import 'package:nappy_mobile/features/auth/controllers/signup_controller.dart';
 import 'package:nappy_mobile/features/auth/views/pages/auth_page_builder.dart';
+import 'package:nappy_mobile/features/auth/views/widgets/auth_providers_list.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
+import 'package:nappy_mobile/widgets/visibility_textfield.dart';
 
 class SignupPage extends ConsumerWidget {
   const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(signUpControllerProvider.select((form) => form.loading));
+    final hasAgreedTerms = ref.watch(signUpControllerProvider.select((form) => form.agreeTerms));
     return AuthPageBuilder(
       title: "Sign up",
       subtitle: "Create an account to get started!",
-      builder: (context, state, theme) {
+      builder: (context, theme) {
+        final textTheme = theme.textTheme;
         return [
-          const SizedBox(
-            height: 30,
-          ),
-          PrimaryButton(
-            text: "Show login",
-            onPressed: () {
-              ref.read(authPageControllerProvider.notifier).showLogin();
+          TextFormField(
+            decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.email_outlined,
+                color: theme.iconTheme.color,
+              ),
+              hintText: "Enter your email address",
+            ),
+            onChanged: (String? e) {
+              ref.read(signUpControllerProvider.notifier).onEmailUpdate(e);
             },
+            keyboardType: TextInputType.emailAddress,
+          ),
+          kTextFieldGap,
+          VisibilityTextField(
+            hintText: "Enter your password",
+            prefixIcon: Icon(
+              Icons.lock_outline,
+              color: theme.iconTheme.color,
+            ),
+            onChanged: (String? pw) {
+              ref.read(signUpControllerProvider.notifier).onPasswordUpdate(pw);
+            },
+          ),
+          kTextFieldGap,
+          VisibilityTextField(
+            hintText: "Verify password",
+            prefixIcon: Icon(
+              Icons.lock_outline,
+              color: theme.iconTheme.color,
+            ),
+            onChanged: (String? pw) {
+              ref.read(signUpControllerProvider.notifier).onVerifyPasswordUpdate(pw);
+            },
+          ),
+          kTextFieldGap,
+          Row(
+            children: [
+              Checkbox(
+                value: hasAgreedTerms,
+                onChanged: (val) {
+                  ref.read(signUpControllerProvider.notifier).setAgreeTerms(val);
+                },
+              ),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "I agree to the ",
+                        style: textTheme.bodyText1!.copyWith(color: NappyColors.mutedText),
+                      ),
+                      TextSpan(text: "Privacy Policy", style: textTheme.bodyText1),
+                      TextSpan(
+                        text: " and ",
+                        style: textTheme.bodyText1!.copyWith(
+                          color: NappyColors.mutedText,
+                        ),
+                      ),
+                      TextSpan(text: "Terms of Service", style: textTheme.bodyText1)
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          kTextFieldGap,
+          PrimaryButton(
+            text: "Create account",
+            onPressed: () {
+              ref.read(signUpControllerProvider.notifier).register(context);
+            },
+            loading: isLoading,
+          ),
+          kDefaultMargin,
+          AuthProvidersList(
+            controller: ref.read(loginControllerProvider.notifier),
+          ),
+          Row(
+            children: [
+              const Spacer(),
+              Text(
+                "Already have an account? ",
+                style: textTheme.subtitle1,
+              ),
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(authPageControllerProvider.notifier).showLogin();
+                  },
+                  child: Text(
+                    "Log in",
+                    style: textTheme.subtitle1!.copyWith(color: NappyColors.primary),
+                  ),
+                ),
+              ),
+              const Spacer(),
+            ],
           )
         ];
       },

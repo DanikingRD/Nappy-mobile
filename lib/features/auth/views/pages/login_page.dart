@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:nappy_mobile/constants/assets.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
-import 'package:nappy_mobile/features/auth/controllers/auth_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
+import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/features/auth/views/pages/auth_page_builder.dart';
-import 'package:nappy_mobile/widgets/external_auth_button.dart';
-import 'package:nappy_mobile/widgets/external_auth_divider.dart';
+import 'package:nappy_mobile/features/auth/views/widgets/auth_providers_list.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
 import 'package:nappy_mobile/widgets/visibility_textfield.dart';
 
@@ -19,10 +17,11 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(loginControllerProvider.select((form) => form.loading));
     return AuthPageBuilder(
-      title: "Sign in",
+      title: "Log in",
       subtitle: "Please fill in the credentials",
-      builder: (context, state, theme) {
+      builder: (context, theme) {
         final textTheme = theme.textTheme;
         return [
           TextFormField(
@@ -34,7 +33,7 @@ class LoginPage extends ConsumerWidget {
               hintText: "Enter your email address",
             ),
             onChanged: (String? e) {
-              ref.read(formControllerProvider.notifier).onEmailUpdate(e);
+              ref.read(loginControllerProvider.notifier).onEmailUpdate(e);
             },
             keyboardType: TextInputType.emailAddress,
           ),
@@ -46,7 +45,7 @@ class LoginPage extends ConsumerWidget {
               color: theme.iconTheme.color,
             ),
             onChanged: (String? pw) {
-              ref.read(formControllerProvider.notifier).onPasswordUpdate(pw);
+              ref.read(loginControllerProvider.notifier).onPasswordUpdate(pw);
             },
           ),
           kTextFieldGap,
@@ -66,29 +65,22 @@ class LoginPage extends ConsumerWidget {
           kDefaultMargin,
           PrimaryButton(
             onPressed: () async {
-              await ref.read(formControllerProvider.notifier).signIn(context);
+              await ref.read(loginControllerProvider.notifier).signIn(context);
             },
             text: "Sign in",
-            loading: state.loading,
+            loading: isLoading
           ),
           kDefaultMargin,
-          const ExternalAuthDivider("Or"),
-          kDefaultMargin,
-          ExternalAuthButton(
-            onClick: () async {
-              await ref.read(formControllerProvider.notifier).signInWithGoogle(context);
-            },
-            logoPath: kGoogleImgPath,
-            title: "Continue With Google",
+          AuthProvidersList(
+            controller: ref.read(loginControllerProvider.notifier),
           ),
-          kDefaultMargin,
           Row(
             children: [
+              const Spacer(),
               Text(
-                "Not a member yet?",
+                "Don't have an account? ",
                 style: textTheme.subtitle1,
               ),
-              const Spacer(),
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
@@ -101,6 +93,7 @@ class LoginPage extends ConsumerWidget {
                   ),
                 ),
               ),
+              const Spacer(),
             ],
           )
         ];

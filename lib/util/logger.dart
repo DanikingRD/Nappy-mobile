@@ -8,6 +8,15 @@ class NappyLogger extends Logger {
     required Level level,
   }) : super(printer: printer, level: level);
 
+  /// Log debugging exceptions
+  void handleDebugLog({
+    required String element,
+    required String code,
+    required String desc,
+  }) {
+    d('[$element] has thrown exception code [$code]: $desc');
+  }
+
   static NappyLogger getLogger(String className) {
     final Level level;
     if (NappyConfig.isDebugging) {

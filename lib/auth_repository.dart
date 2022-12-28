@@ -75,6 +75,7 @@ class AuthRepositoryImpl implements IAuthRepository {
         return right(unit);
       }
     } on FirebaseException catch (e) {
+      
       return left(AuthErrorHelper.getByCode(e.code));
     } catch (e) {
       return left(AuthError.serverError);

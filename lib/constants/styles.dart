@@ -25,6 +25,12 @@ InputDecorationTheme kPrimaryInputDecorationTheme = InputDecorationTheme(
   border: InputBorder.none,
   hintStyle: kSubtitle1,
 );
+final CheckboxThemeData kPrimaryCheckboxTheme = CheckboxThemeData(
+  fillColor: const MaterialStatePropertyAll(NappyColors.primary),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(4.0),
+  ),
+);
 
 const IconThemeData kPrimaryIconTheme = IconThemeData(
   color: NappyColors.primaryFillText,
