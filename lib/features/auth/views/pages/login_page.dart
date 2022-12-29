@@ -35,10 +35,12 @@ class LoginPage extends ConsumerWidget {
             onChanged: (String? e) {
               ref.read(loginControllerProvider.notifier).onEmailUpdate(e);
             },
+            textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
           ),
           kTextFieldGap,
           VisibilityTextField(
+            textInputAction: TextInputAction.done,
             hintText: "Enter your password",
             prefixIcon: Icon(
               Icons.lock_outline,
@@ -46,6 +48,9 @@ class LoginPage extends ConsumerWidget {
             ),
             onChanged: (String? pw) {
               ref.read(loginControllerProvider.notifier).onPasswordUpdate(pw);
+            },
+            onFieldSubmitted: (value) async {
+              await ref.read(loginControllerProvider.notifier).signIn(context);
             },
           ),
           kTextFieldGap,
@@ -64,12 +69,11 @@ class LoginPage extends ConsumerWidget {
           ),
           kDefaultMargin,
           PrimaryButton(
-            onPressed: () async {
-              await ref.read(loginControllerProvider.notifier).signIn(context);
-            },
-            text: "Sign in",
-            loading: isLoading
-          ),
+              onPressed: () async {
+                await ref.read(loginControllerProvider.notifier).signIn(context);
+              },
+              text: "Sign in",
+              loading: isLoading),
           kDefaultMargin,
           AuthProvidersList(
             controller: ref.read(loginControllerProvider.notifier),

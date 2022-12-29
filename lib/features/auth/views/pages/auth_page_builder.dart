@@ -23,28 +23,30 @@ class AuthPageBuilder extends StatelessWidget {
     final margin = Responsive.isSmallScreen(context) ? 40.0 : width * 0.1;
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    return ListView(
-      shrinkWrap: true,
-      padding: EdgeInsets.symmetric(horizontal: margin),
-      children: [
-        const SizedBox(
-          height: 30,
-        ),
-        Text(title, style: textTheme.headline1),
-        const SizedBox(
-          height: 10,
-        ),
-        Text(
-          subtitle,
-          style: textTheme.subtitle1!.copyWith(
-            color: NappyColors.mutedText,
+    return Form(
+      child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(horizontal: margin),
+        children: [
+          const SizedBox(
+            height: 30,
           ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-        ...builder(context, theme),
-      ],
+          Text(title, style: textTheme.headline1),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            subtitle,
+            style: textTheme.subtitle1!.copyWith(
+              color: NappyColors.mutedText,
+            ),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          ...builder(context, theme),
+        ],
+      ),
     );
   }
 }

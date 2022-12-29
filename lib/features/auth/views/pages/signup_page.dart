@@ -35,6 +35,7 @@ class SignupPage extends ConsumerWidget {
               ref.read(signUpControllerProvider.notifier).onEmailUpdate(e);
             },
             keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
           ),
           kTextFieldGap,
           VisibilityTextField(
@@ -46,6 +47,7 @@ class SignupPage extends ConsumerWidget {
             onChanged: (String? pw) {
               ref.read(signUpControllerProvider.notifier).onPasswordUpdate(pw);
             },
+            textInputAction: TextInputAction.next,
           ),
           kTextFieldGap,
           VisibilityTextField(
@@ -56,6 +58,10 @@ class SignupPage extends ConsumerWidget {
             ),
             onChanged: (String? pw) {
               ref.read(signUpControllerProvider.notifier).onVerifyPasswordUpdate(pw);
+            },
+            textInputAction: TextInputAction.send,
+            onFieldSubmitted: (value) {
+              ref.read(signUpControllerProvider.notifier).register(context);
             },
           ),
           kTextFieldGap,
