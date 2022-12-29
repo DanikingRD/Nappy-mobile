@@ -25,7 +25,7 @@ class ValueHelper {
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: "Email Field");
+      logger.handleDebugLogErr(code: e.code, desc: e.message, element: "Email Field");
       return Option.none();
     } on IllegalValueException catch (e) {
       DialogBox.show(
@@ -35,7 +35,7 @@ class ValueHelper {
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: "Email Field");
+      logger.handleDebugLogErr(code: e.code, desc: e.message, element: "Email Field");
       return Option.none();
     }
   }
@@ -57,7 +57,7 @@ class ValueHelper {
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: field);
+      logger.handleDebugLogErr(code: e.code, desc: e.message, element: field);
       return Option.none();
     } on TooShortValueException catch (e) {
       DialogBox.show(
@@ -67,7 +67,7 @@ class ValueHelper {
         continueText: "OK",
         type: NotificationType.error,
       );
-      logger.handleDebugLog(code: e.code, desc: e.message, element: field);
+      logger.handleDebugLogErr(code: e.code, desc: e.message, element: field);
       return Option.none();
     }
   }

@@ -6,7 +6,7 @@ import 'package:nappy_mobile/value/password_value.dart';
 
 /// Represents an Authentication Repository.
 /// Feel free to further extend this.
-abstract class IAuthRepository {
+abstract class IAuthRepositoryFacade {
   Future<Either<AuthError, Unit>> register({
     required EmailAddressValue email,
     required PasswordValue password,

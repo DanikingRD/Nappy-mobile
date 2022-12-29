@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/auth_repository.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
-import 'package:nappy_mobile/util/auth_interface.dart';
+import 'package:nappy_mobile/util/auth_facade.dart';
 import 'package:nappy_mobile/util/logger.dart';
 import 'package:nappy_mobile/value/email_address_value.dart';
 import 'package:nappy_mobile/value/password_value.dart';
@@ -25,23 +25,23 @@ final authStateChangesProvider = StreamProvider(
 );
 
 class AuthService {
-  final IAuthRepository _repository;
+  final IAuthRepositoryFacade _repository;
   final NappyLogger _logger;
 
   const AuthService({
-    required IAuthRepository authService,
+    required IAuthRepositoryFacade authService,
     required NappyLogger logger,
   })  : _repository = authService,
         _logger = logger;
 
   Future<Unit> signInWithGoogle({
-    required void Function(AuthError) onError,
+    required void Function(AuthError error) onError,
     required VoidCallback onSuccess,
   }) async {
     final response = await _repository.signInWithGoogle();
     return response.match(
       (err) {
-        _logger.handleDebugLog(
+        _logger.handleDebugLogErr(
           code: err.code,
           desc: err.description,
           element: (AuthService).toString(),
@@ -68,7 +68,7 @@ class AuthService {
     );
     return response.match(
       (err) {
-        _logger.handleDebugLog(
+        _logger.handleDebugLogErr(
           code: err.code,
           desc: err.description,
           element: (AuthService).toString(),
@@ -95,7 +95,7 @@ class AuthService {
     );
     return response.match(
       (err) {
-        _logger.handleDebugLog(
+        _logger.handleDebugLogErr(
           code: err.code,
           desc: err.description,
           element: (AuthService).toString(),
@@ -109,4 +109,6 @@ class AuthService {
       },
     );
   }
+
+  void handleError(AuthError error) {}
 }

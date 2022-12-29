@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nappy_mobile/config.dart';
+import 'package:nappy_mobile/util/auth_error.dart';
 
 class NappyLogger extends Logger {
   NappyLogger._({
@@ -9,12 +10,12 @@ class NappyLogger extends Logger {
   }) : super(printer: printer, level: level);
 
   /// Log debugging exceptions
-  void handleDebugLog({
+  void handleDebugLogErr({
     required String element,
     required String code,
     required String desc,
   }) {
-    d('[$element] has thrown exception code [$code]: $desc');
+    d('[$element] has thrown exception [$code]: $desc');
   }
 
   static NappyLogger getLogger(String className) {

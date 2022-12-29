@@ -1,4 +1,3 @@
-/// Authentication related errors
 enum AuthError {
   /// Thrown if there already exists an account with the given email address.
   emailAlreadyExists('email-already-in-use', "This emails is already being used", ""),
@@ -15,9 +14,12 @@ enum AuthError {
 
   /// Thrown if email/password accounts are not enabled in the backend.
   opNotAllowed('operation-not-allowed', "Operation Not Allowed", "Contact with support."),
-
+  
+  /// Thrown if none of the previous errors were matched.
   serverError('undefined', "Unknown Error", "Contact with support."),
-  ;
+
+  /// Thrown if the operation was canceled by the user. (E.g Google Auth popup was closed).
+  canceledByUser('canceled-by-user', "Canceled By User", "The operation was canceled by the user");
 
   final String code;
   final String title;
