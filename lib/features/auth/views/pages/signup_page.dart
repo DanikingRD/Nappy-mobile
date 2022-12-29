@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/constants/colors.dart';
 import 'package:nappy_mobile/constants/ui.dart';
 import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/signup_controller.dart';
+import 'package:nappy_mobile/features/auth/views/auth_view.dart';
 import 'package:nappy_mobile/features/auth/views/pages/auth_page_builder.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/auth_providers_list.dart';
 import 'package:nappy_mobile/widgets/primary_button.dart';
@@ -131,6 +133,6 @@ class SignupPage extends ConsumerWidget {
           )
         ];
       },
-    );
+    ).animate().fade(duration: AuthView.fadeDuration);
   }
 }

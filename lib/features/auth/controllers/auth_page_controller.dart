@@ -1,18 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/features/auth/states/auth_page.dart';
 
-final authPageControllerProvider = StateNotifierProvider<AuthPageController, AuthPage>((ref) {
+final authPageControllerProvider = StateNotifierProvider<AuthPageController, AuthPageState>((ref) {
   return AuthPageController();
 });
 
-class AuthPageController extends StateNotifier<AuthPage> {
-  AuthPageController() : super(AuthPage.login);
+class AuthPageController extends StateNotifier<AuthPageState> {
+  AuthPageController() : super(AuthPageState.init());
 
   void showLogin() {
-    state = AuthPage.login;
+    state = state.copyWith(activePage: AuthPage.login);
   }
 
   void showSignUp() {
-    state = AuthPage.signup;
+    state = state.copyWith(activePage: AuthPage.signup);
   }
 }

@@ -8,15 +8,16 @@ import 'package:nappy_mobile/features/auth/views/pages/signup_page.dart';
 import 'package:nappy_mobile/util/responsive.dart';
 
 class AuthView extends ConsumerWidget {
+  static const Duration fadeDuration = Duration(milliseconds: 300);
   const AuthView({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final page = ref.watch(authPageControllerProvider);
+    final state = ref.watch(authPageControllerProvider);
     final Widget child;
-    switch (page) {
+    switch (state.activePage) {
       case AuthPage.login:
         child = const LoginPage();
         break;
