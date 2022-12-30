@@ -10,8 +10,8 @@ extension DatabaseHelper on FirebaseFirestore {
   /// crashing the app.
   Future<DocumentReference<User>> getUserDoc(IAuthRepositoryFacade interface) async {
     final optionalUser = interface.getUserIdentifier();
-    final user = optionalUser.getOrElse(() => throw NotAuthenticatedError());
-    return collection(DatabaseCollections.users).doc(user.id).withConverter(
+    final identifier = optionalUser.getOrElse(() => throw NotAuthenticatedError());
+    return collection(DatabaseCollections.users).doc(identifier.value).withConverter(
       fromFirestore: (snapshot, options) {
         if (snapshot.data() == null) {
           throw NullDocumentError();

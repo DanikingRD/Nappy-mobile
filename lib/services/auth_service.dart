@@ -19,7 +19,7 @@ final authServiceProvider = Provider(
 );
 final authStateChangesProvider = StreamProvider(
   (ref) {
-    return ref.watch(authRepositoryProvider).onAuthStateChanged();
+    return ref.watch(authRepositoryProvider).onUserAuthUpdate();
   },
   name: (AuthService).toString(),
 );

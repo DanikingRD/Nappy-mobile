@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nappy_mobile/api/interfaces/auth_facade.dart';
-import 'package:nappy_mobile/common/global_providers.dart';
-import 'package:nappy_mobile/common/user.dart';
 import 'package:nappy_mobile/common/error/auth_error.dart';
+import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
+import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';
 
 final authRepositoryProvider = Provider<IAuthRepositoryFacade>((ref) {
@@ -89,14 +89,14 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
   }
 
   @override
-  Stream<Option<UserIdentifier>> onAuthStateChanged() {
+  Stream<Option<Identifier>> onUserAuthUpdate() {
     final authStates = _firebaseAuth.authStateChanges();
     return authStates.map((event) {
-      if (event == null) {
-        return Option.none();
-      }
-      final id = UserIdentifier(id: event.uid);
-      return Option.of(id);
+      return Option.fromPredicateMap<User?, Identifier>(
+        event,
+        (user) => user != null,
+        (user) => Identifier.fromUUID(user!.uid),
+      );
     });
   }
 
@@ -113,12 +113,12 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
   }
 
   @override
-  Option<UserIdentifier> getUserIdentifier() {
+  Option<Identifier> getUserIdentifier() {
     final user = _firebaseAuth.currentUser;
-    final userMap = Option.fromPredicateMap<User?, UserIdentifier>(
+    final userMap = Option.fromPredicateMap<User?, Identifier>(
       user,
       (user) => user != null,
-      (user) => UserIdentifier(id: user!.uid),
+      (user) => Identifier.fromUUID(user!.uid),
     );
     return userMap;
   }
