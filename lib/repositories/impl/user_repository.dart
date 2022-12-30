@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/common/errors/database_error.dart';
 import 'package:nappy_mobile/common/global_providers.dart';
-import 'package:nappy_mobile/common/util/database_helper.dart';
+import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/models/user.dart';
