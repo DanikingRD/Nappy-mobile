@@ -4,6 +4,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/features/auth/states/login_form.dart';
 import 'package:nappy_mobile/services/auth_service.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
+import 'package:nappy_mobile/util/connection.dart';
 import 'package:nappy_mobile/util/extensions.dart';
 import 'package:nappy_mobile/util/logger.dart';
 import 'package:nappy_mobile/util/notification.dart';
@@ -34,16 +35,23 @@ class LoginController extends StateNotifier<LoginForm> {
         );
 
   Future<Unit> signInWithGoogle(BuildContext context) async {
-    setLoading();
+    final connection = await handleConnectionError(context);
+    if (!connection) {
+      return unit;
+    }
+    // Do not show loading indicator when signing in with google.
     await _authService.signInWithGoogle(
       onError: (error) => onAuthError(error, context),
       onSuccess: () => onAuthSuccess(context),
     );
-    setIdle();
     return unit;
   }
 
-  Future<void> signIn(BuildContext context) async {
+  Future<Unit> signIn(BuildContext context) async {
+    final connection = await handleConnectionError(context);
+    if (!connection) {
+      return unit;
+    }
     final email = ValueHelper.handleEmail(
       context: context,
       email: state.email,
@@ -56,7 +64,7 @@ class LoginController extends StateNotifier<LoginForm> {
     );
     // Fast return if any of the inputs are invalid
     if (email.isNone() || password.isNone()) {
-      return;
+      return unit;
     }
     final emailVal = email.getOrThrow();
     final passwordVal = password.getOrThrow();
@@ -68,6 +76,7 @@ class LoginController extends StateNotifier<LoginForm> {
       onSuccess: () => onAuthSuccess(context),
     );
     setIdle();
+    return unit;
   }
 
   void setLoading() {

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:nappy_mobile/config.dart';
-import 'package:nappy_mobile/util/auth_error.dart';
 
 class NappyLogger extends Logger {
   NappyLogger._({

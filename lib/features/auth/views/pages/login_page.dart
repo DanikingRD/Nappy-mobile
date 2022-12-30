@@ -77,9 +77,7 @@ class LoginPage extends ConsumerWidget {
               text: "Sign in",
               loading: isLoading),
           kDefaultMargin,
-          AuthProvidersList(
-            controller: ref.read(loginControllerProvider.notifier),
-          ),
+          const AuthProvidersList(),
           Row(
             children: [
               const Spacer(),

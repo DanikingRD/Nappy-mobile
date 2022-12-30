@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/features/auth/states/signup_form.dart';
 import 'package:nappy_mobile/services/auth_service.dart';
 import 'package:nappy_mobile/util/auth_error.dart';
+import 'package:nappy_mobile/util/connection.dart';
 import 'package:nappy_mobile/util/extensions.dart';
 import 'package:nappy_mobile/util/logger.dart';
 import 'package:nappy_mobile/util/notification.dart';
@@ -32,7 +34,11 @@ class SignUpController extends StateNotifier<SignUpForm> {
         _logger = logger,
         super(SignUpForm.empty());
 
-  Future<void> register(BuildContext context) async {
+  Future<Unit> register(BuildContext context) async {
+    final connection = await handleConnectionError(context);
+    if (!connection) {
+      return unit;
+    }
     final email = ValueHelper.handleEmail(
       context: context,
       email: state.email,
@@ -52,7 +58,7 @@ class SignUpController extends StateNotifier<SignUpForm> {
 
     // Fast return if any of the inputs are invalid
     if (email.isNone() || password.isNone() || passwordVerification.isNone()) {
-      return;
+      return unit;
     }
     if (password != passwordVerification) {
       DialogBox.show(
@@ -62,7 +68,7 @@ class SignUpController extends StateNotifier<SignUpForm> {
         continueText: "Continue",
         type: NotificationType.error,
       );
-      return;
+      return unit;
     }
     if (!state.agreeTerms) {
       showToast(
@@ -70,7 +76,7 @@ class SignUpController extends StateNotifier<SignUpForm> {
         type: NotificationType.info,
         context: context,
       );
-      return;
+      return unit;
     }
     final emailVal = email.getOrThrow();
     final passwordVal = password.getOrThrow();
@@ -82,6 +88,7 @@ class SignUpController extends StateNotifier<SignUpForm> {
       onSuccess: () => handleSuccess(context),
     );
     setIdle();
+    return unit;
   }
 
   void handleError(AuthError e, BuildContext ctx) {

@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/util/connection.dart';
 import 'package:nappy_mobile/util/notification.dart';
 import 'package:nappy_mobile/util/responsive.dart';
 

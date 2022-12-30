@@ -14,7 +14,7 @@ enum AuthError {
 
   /// Thrown if email/password accounts are not enabled in the backend.
   opNotAllowed('operation-not-allowed', "Operation Not Allowed", "Contact with support."),
-  
+
   /// Thrown if none of the previous errors were matched.
   serverError('undefined', "Unknown Error", "Contact with support."),
 
@@ -29,6 +29,9 @@ enum AuthError {
 
 extension AuthErrorHelper on AuthError {
   static AuthError getByCode(String code) {
+    if (code == 'popup-closed-by-user') {
+      return AuthError.canceledByUser;
+    }
     return AuthError.values.firstWhere(
       (element) => element.code == code,
       orElse: () => AuthError.serverError,

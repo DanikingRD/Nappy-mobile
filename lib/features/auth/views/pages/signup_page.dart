@@ -106,9 +106,7 @@ class SignupPage extends ConsumerWidget {
             loading: isLoading,
           ),
           kDefaultMargin,
-          AuthProvidersList(
-            controller: ref.read(loginControllerProvider.notifier),
-          ),
+          const AuthProvidersList(),
           Row(
             children: [
               const Spacer(),
