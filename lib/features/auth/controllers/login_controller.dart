@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
 import 'package:nappy_mobile/features/auth/states/login_form.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/auth_dialogs.dart';
-import 'package:nappy_mobile/services/auth_service.dart';
+import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
+import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {
     return LoginController(
-      authService: ref.read(authServiceProvider),
+      authService: ref.read(authRepositoryProvider),
       logger: NappyLogger.getLogger((LoginController).toString()),
     );
   },
@@ -21,11 +21,11 @@ final loginControllerProvider = StateNotifierProvider.autoDispose<LoginControlle
 );
 
 class LoginController extends StateNotifier<LoginForm> {
-  final AuthService _authService;
+  final IAuthRepositoryFacade _authService;
   final NappyLogger _logger;
 
   LoginController({
-    required AuthService authService,
+    required IAuthRepositoryFacade authService,
     required NappyLogger logger,
   })  : _authService = authService,
         _logger = logger,
@@ -39,9 +39,10 @@ class LoginController extends StateNotifier<LoginForm> {
       return unit;
     }
     // Do not show loading indicator when signing in with google.
-    await _authService.signInWithGoogle(
-      onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
-      onSuccess: () => AuthDialogs.onAuthSuccess(context),
+    final res = await _authService.signInWithGoogle();
+    res.match(
+      (exception) => AuthDialogs.onAuthError(exception, context),
+      (_) => AuthDialogs.onAuthSuccess(context),
     );
     return unit;
   }
@@ -68,18 +69,17 @@ class LoginController extends StateNotifier<LoginForm> {
     final emailVal = email.getOrThrow();
     final passwordVal = password.getOrThrow();
     setLoading();
-    await _authService.signIn(
+    final res = await _authService.signIn(
       email: emailVal,
       password: passwordVal,
-      onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
-      onSuccess: () {
-        AuthDialogs.onAuthSuccess(context);
-      },
+    );
+    res.match(
+      (exception) => AuthDialogs.onAuthError(exception, context),
+      (_) => AuthDialogs.onAuthSuccess(context),
     );
     setIdle();
     return unit;
   }
-  
 
   void setLoading() {
     state = state.copyWith(loading: true);

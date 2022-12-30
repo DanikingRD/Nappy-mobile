@@ -1,5 +1,5 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/error/database_error.dart';
+import 'package:nappy_mobile/common/errors/database_error.dart';
 import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/models/user.dart';
 

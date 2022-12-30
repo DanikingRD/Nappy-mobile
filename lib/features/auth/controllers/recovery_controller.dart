@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/auth_dialogs.dart';
-import 'package:nappy_mobile/services/auth_service.dart';
+import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
+import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 
 final recoveryControllerProvider = StateNotifierProvider.autoDispose<RecoveryController, bool>(
   (ref) {
     return RecoveryController(
       logger: NappyLogger.getLogger((RecoveryController).toString()),
-      service: ref.read(authServiceProvider),
+      authRepository: ref.read(authRepositoryProvider),
     );
   },
   name: (RecoveryController).toString(),
@@ -21,12 +21,12 @@ final recoveryControllerProvider = StateNotifierProvider.autoDispose<RecoveryCon
 
 class RecoveryController extends StateNotifier<bool> {
   final NappyLogger _logger;
-  final AuthService _service;
+  final IAuthRepositoryFacade _authRepository;
   RecoveryController({
     required NappyLogger logger,
-    required AuthService service,
+    required IAuthRepositoryFacade authRepository,
   })  : _logger = logger,
-        _service = service,
+        _authRepository = authRepository,
         super(false);
 
   /// This will try to send a reset password link to the passed in email.
@@ -44,13 +44,12 @@ class RecoveryController extends StateNotifier<bool> {
     if (email.isNone()) {
       return unit;
     }
-
     final emailVal = email.getOrThrow();
     setLoading();
-    await _service.sendResetPasswordLink(
-      onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
-      onSuccess: () => AuthDialogs.onEmailVerificationSent(context),
-      email: emailVal,
+    final result = await _authRepository.sendResetPasswordLink(emailVal);
+    result.match(
+      (exception) => AuthDialogs.onAuthError(exception, context),
+      (_) => AuthDialogs.onEmailVerificationSent(context),
     );
     setIdle();
     return unit;

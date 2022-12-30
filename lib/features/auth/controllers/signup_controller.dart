@@ -2,25 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/api/impl/user_repository.dart';
-import 'package:nappy_mobile/api/interfaces/user_facade.dart';
-import 'package:nappy_mobile/common/value/identifier.dart';
-import 'package:nappy_mobile/features/auth/states/signup_form.dart';
-import 'package:nappy_mobile/models/user.dart';
-import 'package:nappy_mobile/services/auth_service.dart';
-import 'package:nappy_mobile/common/error/auth_error.dart';
+import 'package:nappy_mobile/common/exceptions/auth_exceptions.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
 import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 import 'package:nappy_mobile/common/widgets/toast.dart';
+import 'package:nappy_mobile/features/auth/states/signup_form.dart';
+import 'package:nappy_mobile/models/user.dart';
+import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
+import 'package:nappy_mobile/repositories/impl/user_repository.dart';
+import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
+import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
 final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpForm>(
   (ref) {
     return SignUpController(
-      authService: ref.read(authServiceProvider),
+      authRepository: ref.read(authRepositoryProvider),
       userInterface: ref.read(userRepositoryProvider),
       logger: NappyLogger.getLogger((SignUpController).toString()),
     );
@@ -29,16 +30,15 @@ final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpF
 );
 
 class SignUpController extends StateNotifier<SignUpForm> {
-  final AuthService _authService;
+  final IAuthRepositoryFacade _authRepository;
   final IUserFacade _userInterface;
-
   final NappyLogger _logger;
 
   SignUpController({
-    required AuthService authService,
+    required IAuthRepositoryFacade authRepository,
     required IUserFacade userInterface,
     required NappyLogger logger,
-  })  : _authService = authService,
+  })  : _authRepository = authRepository,
         _logger = logger,
         _userInterface = userInterface,
         super(SignUpForm.empty());
@@ -90,18 +90,20 @@ class SignUpController extends StateNotifier<SignUpForm> {
     final emailVal = email.getOrThrow();
     final passwordVal = password.getOrThrow();
     setLoading();
-    await _authService.register(
+    final result = await _authRepository.register(
       email: emailVal,
       password: passwordVal,
-      onError: (error) => handleError(error, context),
-      onSuccess: () async {
+    );
+    result.match(
+      (error) => handleError(error, context),
+      (_) async {
         final User user = User(
           email: emailVal.value,
           id: Identifier(),
         );
         final res = await _userInterface.create(user);
         res.match(
-          (err) => handleError(AuthError.serverError, context),
+          (err) => handleError(AuthExceptionOutput.serverError, context),
           (_) => handleSuccess(context),
         );
       },
@@ -110,7 +112,7 @@ class SignUpController extends StateNotifier<SignUpForm> {
     return unit;
   }
 
-  void handleError(AuthError e, BuildContext ctx) {
+  void handleError(AuthExceptionOutput e, BuildContext ctx) {
     DialogBox.show(
       context: ctx,
       title: e.title,
