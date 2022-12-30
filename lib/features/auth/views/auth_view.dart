@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
 import 'package:nappy_mobile/features/auth/states/auth_page.dart';
 import 'package:nappy_mobile/features/auth/views/pages/login_page.dart';
 import 'package:nappy_mobile/features/auth/views/pages/signup_page.dart';
-import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/common/util/responsive.dart';
 
 class AuthView extends ConsumerWidget {
   static const Duration fadeDuration = Duration(milliseconds: 300);

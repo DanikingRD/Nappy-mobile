@@ -1,5 +1,5 @@
-import 'package:nappy_mobile/exceptions/value_exceptions.dart';
-import 'package:nappy_mobile/value/value.dart';
+import 'package:nappy_mobile/common/exceptions/value_exceptions.dart';
+import 'package:nappy_mobile/common/value/value.dart';
 
 class PasswordValue extends Value<String> {
   static const int passwordLengthRequired = 6;

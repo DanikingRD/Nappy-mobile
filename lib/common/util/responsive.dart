@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/constants/breakpoints.dart';
+import 'package:nappy_mobile/common/constants/breakpoints.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class Responsive {

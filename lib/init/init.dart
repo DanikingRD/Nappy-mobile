@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:nappy_mobile/common/firebase_options.dart';
+import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/config.dart';
-import 'package:nappy_mobile/firebase_options.dart';
 import 'package:nappy_mobile/nappy.dart';
-import 'package:nappy_mobile/util/logger.dart';
 
 final NappyLogger logger = NappyLogger.getLogger("init");
 const String appName = "Nappy";

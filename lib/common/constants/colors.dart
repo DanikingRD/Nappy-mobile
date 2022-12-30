@@ -1,6 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/util/notification.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
 
 class NappyColors {
   static const Map<NotificationType, Color> notificationColorMap = {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
 
 class ExternalAuthButton extends StatelessWidget {
   final VoidCallback onClick;

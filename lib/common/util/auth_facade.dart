@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/user.dart';
-import 'package:nappy_mobile/util/auth_error.dart';
-import 'package:nappy_mobile/value/email_address_value.dart';
-import 'package:nappy_mobile/value/password_value.dart';
+import 'package:nappy_mobile/common/user.dart';
+import 'package:nappy_mobile/common/util/auth_error.dart';
+import 'package:nappy_mobile/common/value/email_address_value.dart';
+import 'package:nappy_mobile/common/value/password_value.dart';
 
 /// Represents an Authentication Repository.
 /// Feel free to further extend this.

@@ -1,7 +1,7 @@
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/util/notification.dart';
-import 'package:nappy_mobile/widgets/toast.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/widgets/toast.dart';
 
 Future<bool> handleConnectionError(BuildContext context) async {
   final result = await checkConnection(

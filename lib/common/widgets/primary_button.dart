@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:nappy_mobile/constants/colors.dart';
-import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/ui.dart';
 
 /// The PrimaryButton is used for <i> primary actions </i>.
 /// In other words for executing tasks that are helpful for

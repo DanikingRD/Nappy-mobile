@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/constants/colors.dart';
-import 'package:nappy_mobile/constants/ui.dart';
-import 'package:nappy_mobile/util/notification.dart';
-import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/ui.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/util/responsive.dart';
 
 class DialogBox extends StatelessWidget {
   final String title;

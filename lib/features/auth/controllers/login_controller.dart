@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/features/auth/states/login_form.dart';
 import 'package:nappy_mobile/services/auth_service.dart';
-import 'package:nappy_mobile/util/auth_error.dart';
-import 'package:nappy_mobile/util/connection.dart';
-import 'package:nappy_mobile/util/extensions.dart';
-import 'package:nappy_mobile/util/logger.dart';
-import 'package:nappy_mobile/util/notification.dart';
-import 'package:nappy_mobile/value/value_helper.dart';
-import 'package:nappy_mobile/widgets/dialog_box.dart';
+import 'package:nappy_mobile/common/util/auth_error.dart';
+import 'package:nappy_mobile/common/util/connection.dart';
+import 'package:nappy_mobile/common/util/extensions.dart';
+import 'package:nappy_mobile/common/util/logger.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/value/value_helper.dart';
+import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {

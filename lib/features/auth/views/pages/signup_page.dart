@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/constants/colors.dart';
-import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/ui.dart';
 import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/signup_controller.dart';
 import 'package:nappy_mobile/features/auth/views/auth_view.dart';
 import 'package:nappy_mobile/features/auth/views/pages/auth_page_builder.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/auth_providers_list.dart';
-import 'package:nappy_mobile/widgets/primary_button.dart';
-import 'package:nappy_mobile/widgets/visibility_textfield.dart';
+import 'package:nappy_mobile/common/widgets/primary_button.dart';
+import 'package:nappy_mobile/common/widgets/visibility_textfield.dart';
 
 class SignupPage extends ConsumerWidget {
   const SignupPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/common/util/responsive.dart';
 
 const kMobileTestSize = Size(400, 400);
 const kTabletTestSize = Size(800, 600);

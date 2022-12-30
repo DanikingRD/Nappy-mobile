@@ -1,6 +1,6 @@
-import 'package:nappy_mobile/util/validator.dart';
-import 'package:nappy_mobile/exceptions/value_exceptions.dart';
-import 'package:nappy_mobile/value/value.dart';
+import 'package:nappy_mobile/common/util/validator.dart';
+import 'package:nappy_mobile/common/exceptions/value_exceptions.dart';
+import 'package:nappy_mobile/common/value/value.dart';
 
 class EmailAddressValue extends Value<String> {
   factory EmailAddressValue(String? raw) {

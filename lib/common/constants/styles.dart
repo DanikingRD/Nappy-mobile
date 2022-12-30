@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
 
 TextStyle kHeadline1 = GoogleFonts.raleway().copyWith(
   fontSize: 24,

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/constants/assets.dart';
-import 'package:nappy_mobile/constants/ui.dart';
+import 'package:nappy_mobile/common/constants/assets.dart';
+import 'package:nappy_mobile/common/constants/ui.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/external_auth_button.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/external_auth_divider.dart';

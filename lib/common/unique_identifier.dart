@@ -1,4 +1,4 @@
-import 'package:nappy_mobile/value/value.dart';
+import 'package:nappy_mobile/common/value/value.dart';
 import 'package:uuid/uuid.dart';
 
 class UniqueIdentifier<T> extends Value<String> {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:nappy_mobile/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
 
 class ExternalAuthDivider extends StatelessWidget {
   final String title;

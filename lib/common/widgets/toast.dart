@@ -1,9 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:nappy_mobile/constants/colors.dart';
-import 'package:nappy_mobile/util/connection.dart';
-import 'package:nappy_mobile/util/notification.dart';
-import 'package:nappy_mobile/util/responsive.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/util/connection.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/util/responsive.dart';
 
 void showToast({
   required String message,

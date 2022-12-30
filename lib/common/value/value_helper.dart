@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/exceptions/value_exceptions.dart';
-import 'package:nappy_mobile/util/logger.dart';
-import 'package:nappy_mobile/util/notification.dart';
-import 'package:nappy_mobile/value/email_address_value.dart';
-import 'package:nappy_mobile/value/password_value.dart';
-import 'package:nappy_mobile/widgets/dialog_box.dart';
+import 'package:nappy_mobile/common/exceptions/value_exceptions.dart';
+import 'package:nappy_mobile/common/util/logger.dart';
+import 'package:nappy_mobile/common/util/notification.dart';
+import 'package:nappy_mobile/common/value/email_address_value.dart';
+import 'package:nappy_mobile/common/value/password_value.dart';
+import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 
 class ValueHelper {
   const ValueHelper._();

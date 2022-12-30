@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nappy_mobile/global_providers.dart';
-import 'package:nappy_mobile/user.dart';
-import 'package:nappy_mobile/util/auth_error.dart';
-import 'package:nappy_mobile/util/auth_facade.dart';
-import 'package:nappy_mobile/value/email_address_value.dart';
-import 'package:nappy_mobile/value/password_value.dart';
+import 'package:nappy_mobile/common/global_providers.dart';
+import 'package:nappy_mobile/common/user.dart';
+import 'package:nappy_mobile/common/util/auth_error.dart';
+import 'package:nappy_mobile/common/util/auth_facade.dart';
+import 'package:nappy_mobile/common/value/email_address_value.dart';
+import 'package:nappy_mobile/common/value/password_value.dart';
 
 final authRepositoryProvider = Provider<IAuthRepositoryFacade>((ref) {
   final auth = ref.read(authProvider);
