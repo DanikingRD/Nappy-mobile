@@ -31,11 +31,11 @@ class AuthPageBuilder extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          Text(title, style: textTheme.headline1),
+          SelectableText(title, style: textTheme.headline1),
           const SizedBox(
             height: 10,
           ),
-          Text(
+          SelectableText(
             subtitle,
             style: textTheme.subtitle1!.copyWith(
               color: NappyColors.mutedText,

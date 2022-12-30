@@ -61,7 +61,9 @@ class LoginPage extends ConsumerWidget {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ref.read(authPageControllerProvider.notifier).showRecovery();
+                },
                 child: Text(
                   "Forgot password?",
                   style: textTheme.bodyText1,
@@ -71,11 +73,12 @@ class LoginPage extends ConsumerWidget {
           ),
           kDefaultMargin,
           PrimaryButton(
-              onPressed: () async {
-                await ref.read(loginControllerProvider.notifier).signIn(context);
-              },
-              text: "Sign in",
-              loading: isLoading),
+            onPressed: () async {
+              await ref.read(loginControllerProvider.notifier).signIn(context);
+            },
+            text: "Sign in",
+            loading: isLoading,
+          ),
           kDefaultMargin,
           const AuthProvidersList(),
           Row(

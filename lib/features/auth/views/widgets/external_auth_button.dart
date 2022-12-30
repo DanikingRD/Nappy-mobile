@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 
-class ExternalAuthButton extends StatelessWidget {
+class ExternalAuthButton extends StatefulWidget {
   final VoidCallback onClick;
   final String logoPath;
   final String title;
@@ -13,27 +13,37 @@ class ExternalAuthButton extends StatelessWidget {
   });
 
   @override
+  State<ExternalAuthButton> createState() => _ExternalAuthButtonState();
+}
+
+class _ExternalAuthButtonState extends State<ExternalAuthButton> {
+  Color color = NappyColors.landing;
+  @override
   Widget build(BuildContext context) {
-    return TextButton.icon(
-      onPressed: onClick,
-      style: TextButton.styleFrom(
-        backgroundColor: NappyColors.landing,
-        foregroundColor: Colors.white, // changes splash color
-        minimumSize: const Size(double.infinity, 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(18.0),
+      ),
+      child: TextButton.icon(
+        onPressed: widget.onClick,
+        onHover: (value) {
+          setState(() => color = value ? NappyColors.primary : NappyColors.landing);
+        },
+        style: TextButton.styleFrom(
+          minimumSize: const Size(double.infinity, 50),
         ),
-        elevation: 0.0,
-      ),
-      icon: Image.asset(
-        logoPath,
-        width: 35,
-      ),
-      label: Text(
-        title,
-        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-              color: Colors.white,
-            ),
+        icon: Image.asset(
+          widget.logoPath,
+          width: 35,
+        ),
+        label: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                color: Colors.white,
+              ),
+        ),
       ),
     );
   }

@@ -15,4 +15,8 @@ class AuthPageController extends StateNotifier<AuthPageState> {
   void showSignUp() {
     state = state.copyWith(activePage: AuthPage.signup);
   }
+
+  void showRecovery() {
+    state = state.copyWith(activePage: AuthPage.recovery);
+  }
 }

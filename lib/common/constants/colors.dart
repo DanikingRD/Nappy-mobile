@@ -21,4 +21,5 @@ class NappyColors {
   static const Color danger = Color.fromARGB(255, 253, 107, 107);
   static const Color success = Color(0xff48c774);
   static const Color info = Color(0xFF64B5F6);
+  static const Color primaryHover = Color.fromARGB(255, 241, 80, 80);
 }
