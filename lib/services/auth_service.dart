@@ -34,6 +34,29 @@ class AuthService {
   })  : _repository = authService,
         _logger = logger;
 
+  Future<Unit> sendResetPasswordLink({
+    required void Function(AuthError error) onError,
+    required VoidCallback onSuccess,
+    required EmailAddressValue email,
+  }) async {
+    final response = await _repository.sendResetPasswordLink(email);
+    return response.match(
+      (err) {
+        _logger.handleDebugLogErr(
+          code: err.code,
+          desc: err.description,
+          element: (AuthService).toString(),
+        );
+        onError(err);
+        return unit;
+      },
+      (_) {
+        onSuccess();
+        return unit;
+      },
+    );
+  }
+
   Future<Unit> signInWithGoogle({
     required void Function(AuthError error) onError,
     required VoidCallback onSuccess,
@@ -109,6 +132,4 @@ class AuthService {
       },
     );
   }
-
-  void handleError(AuthError error) {}
 }

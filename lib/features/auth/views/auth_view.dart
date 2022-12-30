@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/util/responsive.dart';
-import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
-import 'package:nappy_mobile/features/auth/states/auth_page.dart';
 
 class AuthView extends ConsumerWidget {
   static const Duration fadeDuration = Duration(milliseconds: 300);
+  final Widget page;
   const AuthView({
     super.key,
+    required this.page,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(authPageControllerProvider);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -26,7 +25,7 @@ class AuthView extends ConsumerWidget {
               },
               Expanded(
                 flex: Responsive.isMediumScreen(context) ? 2 : 1,
-                child: state.activePage.toWidget(),
+                child: page
               )
             ],
           ),

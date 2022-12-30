@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/features/auth/states/login_form.dart';
-import 'package:nappy_mobile/services/auth_service.dart';
 import 'package:nappy_mobile/common/util/auth_error.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
-import 'package:nappy_mobile/common/util/notification.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
-import 'package:nappy_mobile/common/widgets/dialog_box.dart';
+import 'package:nappy_mobile/features/auth/states/login_form.dart';
+import 'package:nappy_mobile/features/auth/views/widgets/auth_dialogs.dart';
+import 'package:nappy_mobile/services/auth_service.dart';
 
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {
@@ -41,8 +40,8 @@ class LoginController extends StateNotifier<LoginForm> {
     }
     // Do not show loading indicator when signing in with google.
     await _authService.signInWithGoogle(
-      onError: (error) => onAuthError(error, context),
-      onSuccess: () => onAuthSuccess(context),
+      onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
+      onSuccess: () => AuthDialogs.onAuthSuccess(context),
     );
     return unit;
   }
@@ -72,8 +71,8 @@ class LoginController extends StateNotifier<LoginForm> {
     await _authService.signIn(
       email: emailVal,
       password: passwordVal,
-      onError: (AuthError error) => onAuthError(error, context),
-      onSuccess: () => onAuthSuccess(context),
+      onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
+      onSuccess: () => AuthDialogs.onAuthSuccess(context),
     );
     setIdle();
     return unit;
@@ -87,25 +86,6 @@ class LoginController extends StateNotifier<LoginForm> {
     state = state.copyWith(loading: false);
   }
 
-  void onAuthError(AuthError e, BuildContext ctx) {
-    DialogBox.show(
-      context: ctx,
-      title: e.title,
-      content: e.description,
-      continueText: "GOT IT",
-      type: NotificationType.error,
-    );
-  }
-
-  void onAuthSuccess(BuildContext context) {
-    DialogBox.show(
-      context: context,
-      title: "Welcome Back!",
-      content: "It's nice to see you again!",
-      continueText: "Continue",
-      type: NotificationType.success,
-    );
-  }
 
   void onEmailUpdate(String? email) {
     state = state.copyWith(email: email);

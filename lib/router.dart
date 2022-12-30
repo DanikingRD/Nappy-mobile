@@ -1,31 +1,34 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/features/auth/views/auth_view.dart';
+import 'package:nappy_mobile/features/auth/views/pages/account_recovery_page.dart';
 import 'package:nappy_mobile/features/auth/views/pages/login_page.dart';
-import 'package:nappy_mobile/features/home/views/home_view.dart';
-import 'package:nappy_mobile/nappy.dart';
+import 'package:nappy_mobile/features/auth/views/pages/signup_page.dart';
 import 'package:routemaster/routemaster.dart';
 
-final publicRoutes = RouteMap(
-  routes: {
-    '/': (_) => const MaterialPage(child: ExtendedScrollWidget(AuthView())),
-  },
-);
-
-final appRoutes = RouteMap(
-  routes: {
-    '/': (_) => const MaterialPage(child: ExtendedScrollWidget(HomeView())),
-  },
-);
-
-class ExtendedScrollWidget extends StatelessWidget {
-  final Widget child;
-  const ExtendedScrollWidget(this.child, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ScrollConfiguration(
-      behavior: const ExtendedScrollBehaviour(),
-      child: child,
-    );
+class Routes {
+  const Routes._();
+  static const String rootRoute = "/";
+  static const String loginRoute = "/login";
+  static const String signupRoute = "/signup";
+  static const String recoveryRoute = "/recovery";
+  static final map = RouteMap(
+    routes: {
+      rootRoute: (route) {
+        return const MaterialPage(child: AuthView(page: LoginPage()));
+      },
+      loginRoute: (route) {
+        return const MaterialPage(child: AuthView(page: LoginPage()));
+      },
+      signupRoute: (route) {
+        return const MaterialPage(child: AuthView(page: SignupPage()));
+      },
+      recoveryRoute: (route) {
+        return const MaterialPage(child: AuthView(page: AccountRecoveryPage()));
+      }
+    },
+  );
+  static void navigate(BuildContext context, String route) {
+    Routemaster.of(context).replace(route);
   }
 }

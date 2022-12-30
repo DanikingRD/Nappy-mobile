@@ -17,6 +17,8 @@ abstract class IAuthRepositoryFacade {
     required PasswordValue password,
   });
 
+  Future<Either<AuthError, Unit>> sendResetPasswordLink(EmailAddressValue email);
+
   Future<Either<AuthError, Unit>> signInWithGoogle();
 
   Stream<Option<UserIdentifier>> onAuthStateChanged();

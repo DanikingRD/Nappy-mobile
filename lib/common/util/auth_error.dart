@@ -1,3 +1,6 @@
+import 'package:nappy_mobile/common/util/logger.dart';
+
+/// Authentication related errors.
 enum AuthError {
   /// Thrown if there already exists an account with the given email address.
   emailAlreadyExists('email-already-in-use', "This emails is already being used", ""),
@@ -11,6 +14,9 @@ enum AuthError {
     "Weak Password",
     "Your password must be at least 6 characters long.",
   ),
+
+  /// Thrown if the email is not registered.
+  accountNotFound('user-not-found', "User not found", "Check your email and try again."),
 
   /// Thrown if email/password accounts are not enabled in the backend.
   opNotAllowed('operation-not-allowed', "Operation Not Allowed", "Contact with support."),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:nappy_mobile/common/constants/assets.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
-import 'package:nappy_mobile/common/constants/styles.dart';
+import 'package:nappy_mobile/common/constants/themes.dart';
+import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/router.dart';
 import 'package:nappy_mobile/services/auth_service.dart';
 import 'package:routemaster/routemaster.dart';
@@ -16,32 +16,23 @@ class Nappy extends ConsumerWidget {
     return authEvents.when(
       data: (optionalId) {
         return MaterialApp.router(
-          routeInformationParser: const RoutemasterParser(),
           routerDelegate: RoutemasterDelegate(
             routesBuilder: (context) {
-              return optionalId.match(
-                () => publicRoutes,
-                (id) => appRoutes,
-              );
+              return Routes.map;
             },
           ),
-          theme: ThemeData(
-            colorScheme: const ColorScheme.light(
-              primary: NappyColors.primary,
-            ),
-            checkboxTheme: kPrimaryCheckboxTheme,
-            inputDecorationTheme: kPrimaryInputDecorationTheme,
-            scaffoldBackgroundColor: Colors.white,
-            primaryIconTheme: kPrimaryIconTheme,
-            iconTheme: kPrimaryIconTheme,
-            fontFamily: kPoppinsFont,
-            textTheme: TextTheme(
-              headline1: kHeadline1,
-              subtitle1: kSubtitle1,
-              bodyText1: kBodyText1,
-            ),
-            textSelectionTheme: kTextSelectionTheme,
-          ),
+          routeInformationParser: const RoutemasterParser(),
+
+          // routeInformationParser: const RoutemasterParser(),
+          // routerDelegate: RoutemasterDelegate(
+          //   routesBuilder: (context) {
+          //     return optionalId.match(
+          //       () => publicRoutes,
+          //       (id) => appRoutes,
+          //     );
+          //   },
+          // ),
+          theme: kLightTheme,
           debugShowCheckedModeBanner: false,
         );
       },

@@ -99,4 +99,16 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
       return Option.of(id);
     });
   }
+
+  @override
+  Future<Either<AuthError, Unit>> sendResetPasswordLink(EmailAddressValue email) async {
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email.value);
+      return right(unit);
+    } on FirebaseAuthException catch (e) {
+      return left(AuthErrorHelper.getByCode(e.code));
+    } catch (e) {
+      return left(AuthError.serverError);
+    }
+  }
 }

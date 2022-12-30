@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/ui.dart';
 import 'package:nappy_mobile/common/widgets/primary_button.dart';
 import 'package:nappy_mobile/common/widgets/secondary_button.dart';
-import 'package:nappy_mobile/features/auth/controllers/auth_page_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
 import 'package:nappy_mobile/features/auth/controllers/recovery_controller.dart';
+import 'package:nappy_mobile/features/auth/views/auth_view.dart';
 import 'package:nappy_mobile/features/auth/views/pages/auth_page_builder.dart';
+import 'package:nappy_mobile/router.dart';
 
 class AccountRecoveryPage extends ConsumerStatefulWidget {
   const AccountRecoveryPage({super.key});
@@ -35,6 +37,7 @@ class _AuthRecoveryPageState extends ConsumerState<AccountRecoveryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(recoveryControllerProvider);
     return AuthPageBuilder(
       title: "Reset Password",
       subtitle: "Enter your email to get password recovery instructions",
@@ -47,6 +50,7 @@ class _AuthRecoveryPageState extends ConsumerState<AccountRecoveryPage> {
           kDefaultMargin,
           PrimaryButton(
             text: "Send Link",
+            loading: isLoading,
             onPressed: () {
               ref.read(recoveryControllerProvider.notifier).submit(
                     context,
@@ -58,11 +62,11 @@ class _AuthRecoveryPageState extends ConsumerState<AccountRecoveryPage> {
           SecondaryButton(
             title: "Return to Login Page",
             onPressed: () {
-              ref.read(authPageControllerProvider.notifier).showLogin();
+              Routes.navigate(context, Routes.loginRoute);
             },
           )
         ];
       },
-    );
+    ).animate().fade(duration: AuthView.fadeDuration);
   }
 }
