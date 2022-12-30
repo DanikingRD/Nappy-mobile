@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/auth_repository.dart';
-import 'package:nappy_mobile/common/util/auth_error.dart';
-import 'package:nappy_mobile/common/util/auth_facade.dart';
+import 'package:nappy_mobile/api/impl/auth_repository.dart';
+import 'package:nappy_mobile/api/interfaces/auth_facade.dart';
+import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';

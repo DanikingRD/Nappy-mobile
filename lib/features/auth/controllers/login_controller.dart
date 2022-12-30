@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/util/auth_error.dart';
+import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
@@ -72,11 +72,14 @@ class LoginController extends StateNotifier<LoginForm> {
       email: emailVal,
       password: passwordVal,
       onError: (AuthError error) => AuthDialogs.onAuthError(error, context),
-      onSuccess: () => AuthDialogs.onAuthSuccess(context),
+      onSuccess: () {
+        AuthDialogs.onAuthSuccess(context);
+      },
     );
     setIdle();
     return unit;
   }
+  
 
   void setLoading() {
     state = state.copyWith(loading: true);
@@ -85,7 +88,6 @@ class LoginController extends StateNotifier<LoginForm> {
   void setIdle() {
     state = state.copyWith(loading: false);
   }
-
 
   void onEmailUpdate(String? email) {
     state = state.copyWith(email: email);

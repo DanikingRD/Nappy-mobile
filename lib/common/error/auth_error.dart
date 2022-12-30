@@ -1,6 +1,4 @@
-import 'package:nappy_mobile/common/util/logger.dart';
-
-/// Authentication related errors.
+/// Authentication related failures.
 enum AuthError {
   /// Thrown if there already exists an account with the given email address.
   emailAlreadyExists('email-already-in-use', "This emails is already being used", ""),
@@ -18,14 +16,22 @@ enum AuthError {
   /// Thrown if the email is not registered.
   accountNotFound('user-not-found', "User not found", "Check your email and try again."),
 
+  /// Thrown if the entered password was wrong.
+  wrongPassword(
+    'wrong-password',
+    "Invalid Credentials",
+    "You have entered an invalid email or password.",
+  ),
+
   /// Thrown if email/password accounts are not enabled in the backend.
   opNotAllowed('operation-not-allowed', "Operation Not Allowed", "Contact with support."),
 
+  /// Thrown if the operation was canceled by the user. (E.g Google Auth popup was closed).
+  canceledByUser('canceled-by-user', "Canceled By User", "The operation was canceled by the user"),
+
   /// Thrown if none of the previous errors were matched.
   serverError('undefined', "Unknown Error", "Contact with support."),
-
-  /// Thrown if the operation was canceled by the user. (E.g Google Auth popup was closed).
-  canceledByUser('canceled-by-user', "Canceled By User", "The operation was canceled by the user");
+  ;
 
   final String code;
   final String title;

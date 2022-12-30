@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:nappy_mobile/api/interfaces/auth_facade.dart';
 import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/user.dart';
-import 'package:nappy_mobile/common/util/auth_error.dart';
-import 'package:nappy_mobile/common/util/auth_facade.dart';
+import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';
 
@@ -110,5 +110,24 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
     } catch (e) {
       return left(AuthError.serverError);
     }
+  }
+
+  @override
+  Option<UserIdentifier> getUserIdentifier() {
+    final user = _firebaseAuth.currentUser;
+    final userMap = Option.fromPredicateMap<User?, UserIdentifier>(
+      user,
+      (user) => user != null,
+      (user) => UserIdentifier(id: user!.uid),
+    );
+    return userMap;
+  }
+
+  @override
+  Future<void> signOut() {
+    return Future.wait([
+      _firebaseAuth.signOut(),
+      _googleAuth.signOut(),
+    ]);
   }
 }

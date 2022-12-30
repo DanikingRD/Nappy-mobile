@@ -2,9 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:nappy_mobile/api/impl/user_repository.dart';
+import 'package:nappy_mobile/api/interfaces/user_facade.dart';
+import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/features/auth/states/signup_form.dart';
+import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/services/auth_service.dart';
-import 'package:nappy_mobile/common/util/auth_error.dart';
+import 'package:nappy_mobile/common/error/auth_error.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
@@ -17,6 +21,7 @@ final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpF
   (ref) {
     return SignUpController(
       authService: ref.read(authServiceProvider),
+      userInterface: ref.read(userRepositoryProvider),
       logger: NappyLogger.getLogger((SignUpController).toString()),
     );
   },
@@ -25,13 +30,17 @@ final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpF
 
 class SignUpController extends StateNotifier<SignUpForm> {
   final AuthService _authService;
+  final IUserFacade _userInterface;
+
   final NappyLogger _logger;
 
   SignUpController({
     required AuthService authService,
+    required IUserFacade userInterface,
     required NappyLogger logger,
   })  : _authService = authService,
         _logger = logger,
+        _userInterface = userInterface,
         super(SignUpForm.empty());
 
   Future<Unit> register(BuildContext context) async {
@@ -85,7 +94,17 @@ class SignUpController extends StateNotifier<SignUpForm> {
       email: emailVal,
       password: passwordVal,
       onError: (error) => handleError(error, context),
-      onSuccess: () => handleSuccess(context),
+      onSuccess: () async {
+        final User user = User(
+          email: emailVal.value,
+          id: Identifier(),
+        );
+        final res = await _userInterface.create(user);
+        res.match(
+          (err) => handleError(AuthError.serverError, context),
+          (_) => handleSuccess(context),
+        );
+      },
     );
     setIdle();
     return unit;

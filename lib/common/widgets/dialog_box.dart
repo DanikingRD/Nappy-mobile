@@ -97,7 +97,7 @@ class DialogBox extends StatelessWidget {
     );
   }
 
-  static void show({
+  static Future<T?> show<T>({
     required BuildContext context,
     required String title,
     required String content,
@@ -105,7 +105,7 @@ class DialogBox extends StatelessWidget {
     VoidCallback? onContinue,
     required NotificationType type,
   }) {
-    showDialog(
+    return showDialog(
       context: context,
       builder: (context) {
         return DialogBox(

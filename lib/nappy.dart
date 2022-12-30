@@ -18,20 +18,13 @@ class Nappy extends ConsumerWidget {
         return MaterialApp.router(
           routerDelegate: RoutemasterDelegate(
             routesBuilder: (context) {
-              return Routes.map;
+              return optionalId.match(
+                () => Routes.publicRoutes,
+                (id) => Routes.publicRoutes,
+              );
             },
           ),
           routeInformationParser: const RoutemasterParser(),
-
-          // routeInformationParser: const RoutemasterParser(),
-          // routerDelegate: RoutemasterDelegate(
-          //   routesBuilder: (context) {
-          //     return optionalId.match(
-          //       () => publicRoutes,
-          //       (id) => appRoutes,
-          //     );
-          //   },
-          // ),
           theme: kLightTheme,
           debugShowCheckedModeBanner: false,
         );

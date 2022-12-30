@@ -14,7 +14,7 @@ class NappyLogger extends Logger {
     required String code,
     required String desc,
   }) {
-    d('[$element] has thrown exception [$code]: $desc');
+    e('[$element] has thrown exception [$code]: $desc');
   }
 
   static NappyLogger getLogger(String className) {
