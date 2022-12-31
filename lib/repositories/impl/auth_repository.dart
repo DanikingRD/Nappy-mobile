@@ -1,24 +1,27 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:nappy_mobile/common/exceptions/auth_exceptions.dart';
+import 'package:nappy_mobile/common/exceptions/backend_error_mapping.dart';
 import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
-import 'package:nappy_mobile/common/util/types.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
 import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';
+import 'package:nappy_mobile/models/user.dart' as model;
+import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
+import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
 final authRepositoryProvider = Provider<IAuthRepositoryFacade>((ref) {
   final auth = ref.read(authProvider);
   final google = ref.read(googleProvider);
+  final iface = ref.read(userRepositoryProvider);
   return AuthRepositoryImpl(
     firebaseAuth: auth,
     googleSignIn: google,
+    userInterface: iface,
   );
 });
 
@@ -29,14 +32,20 @@ final authUpdateProvider = StreamProvider((ref) {
 class AuthRepositoryImpl implements IAuthRepositoryFacade {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleAuth;
+  final IUserFacade _userInterface;
 
   const AuthRepositoryImpl({
     required FirebaseAuth firebaseAuth,
     required GoogleSignIn googleSignIn,
+    required IUserFacade userInterface,
   })  : _firebaseAuth = firebaseAuth,
-        _googleAuth = googleSignIn;
+        _googleAuth = googleSignIn,
+        _userInterface = userInterface;
+
+  /// Calls the repository sign up method and saves the user
+  /// on the database.
   @override
-  AsyncAuthResult<Identifier> register({
+  AsyncAuthResult<Unit> register({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
@@ -46,14 +55,20 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
         password: password.value,
       );
       if (credentials.user == null) {
-        return left(AuthExceptionOutput.unknownError);
+        return left(AuthError.unknown);
       }
+      // Create user record in the database
       final Identifier id = credentials.user!.toIdentifier();
-      return right(id);
+      final model.User user = model.User(email: email.value, id: id);
+      final result = await _userInterface.create(user);
+      return result.match(
+        (error) => left(error),
+        (_) => right(unit),
+      );
     } on FirebaseException catch (e) {
-      return left(AuthException.mapCode(e.code));
+      return left(AuthError.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.unknownError);
+      return left(AuthError.unknown);
     }
   }
 
@@ -70,37 +85,45 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
 
       return right(unit);
     } on FirebaseException catch (e) {
-      return left(AuthException.mapCode(e.code));
+      return left(AuthError.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.unknownError);
+      return left(AuthError.unknown);
     }
   }
 
   @override
-  AsyncAuthResult<Unit> signInWithGoogle() async {
+  AsyncAuthResult<Identifier> signInWithGoogle() async {
     try {
       if (kIsWeb) {
         final provider = GoogleAuthProvider();
         provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-        await _firebaseAuth.signInWithPopup(provider);
-        return right(unit);
+        final creds = await _firebaseAuth.signInWithPopup(provider);
+        if (creds.user == null) {
+          return left(AuthError.unknown);
+        }
+        final identifier = creds.user!.toIdentifier();
+        return right(identifier);
       } else {
         final user = await _googleAuth.signIn();
         if (user == null) {
-          return left(AuthExceptionOutput.canceledByUser);
+          return left(AuthError.unknown);
         }
         final auth = await user.authentication;
         final credential = GoogleAuthProvider.credential(
           accessToken: auth.accessToken,
           idToken: auth.idToken,
         );
-        final userCredential = _firebaseAuth.signInWithCredential(credential);
-        return right(unit);
+        final userCredential = await _firebaseAuth.signInWithCredential(credential);
+        if (userCredential.user == null) {
+          return left(AuthError.unknown);
+        }
+        final identifier = userCredential.user!.toIdentifier();
+        return right(identifier);
       }
     } on FirebaseException catch (e) {
-      return left(AuthException.mapCode(e.code));
+      return left(AuthError.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.unknownError);
+      return left(AuthError.unknown);
     }
   }
 
@@ -121,10 +144,10 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.value);
       return right(unit);
-    } on FirebaseAuthException catch (e) {
-      return left(AuthException.mapCode(e.code));
+    } on FirebaseException catch (e) {
+      return left(AuthError.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.unknownError);
+      return left(AuthError.unknown);
     }
   }
 

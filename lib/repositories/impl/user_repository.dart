@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/errors/database_error.dart';
+import 'package:nappy_mobile/common/exceptions/backend_error_mapping.dart';
 import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
@@ -39,15 +39,15 @@ class UserRepositoryImpl extends IUserFacade {
   }
 
   @override
-  Future<Either<DatabaseError, Unit>> create(User user) async {
+  Future<Either<BackendError, Unit>> create(User user) async {
     try {
       final doc = await _database.getUserDoc(_authRepository);
       await doc.set(user);
       return right(unit);
     } on FirebaseException catch (e) {
-      return left(DatabaseErrorHelper.getByCode(e.code));
+     return left(DatabaseError.mapCode(e.code));
     } catch (e) {
-      return left(DatabaseError.unableToUpdate);
+      return left(DatabaseError.unknown);
     }
   }
 }

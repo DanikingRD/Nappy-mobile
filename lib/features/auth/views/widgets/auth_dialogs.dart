@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:nappy_mobile/common/exceptions/auth_exceptions.dart';
+import 'package:nappy_mobile/common/exceptions/backend_error_mapping.dart';
 import 'package:nappy_mobile/common/util/notification.dart';
 import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 
 class AuthDialogs {
   const AuthDialogs._();
-  static Future<T?> onAuthError<T>(AuthExceptionOutput e, BuildContext ctx) {
+  static Future<T?> onAuthError<T>(BackendError e, BuildContext ctx) {
     return DialogBox.show(
       context: ctx,
       title: e.title,

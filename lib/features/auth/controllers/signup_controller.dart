@@ -2,17 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
-import 'package:nappy_mobile/common/exceptions/auth_exceptions.dart';
+import 'package:nappy_mobile/common/exceptions/backend_error_mapping.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/util/notification.dart';
-import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
 import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 import 'package:nappy_mobile/common/widgets/toast.dart';
 import 'package:nappy_mobile/features/auth/states/signup_form.dart';
-import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
 import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
@@ -95,24 +93,14 @@ class SignUpController extends StateNotifier<SignUpForm> {
       password: passwordVal,
     );
     result.match(
-      (error) => handleError(error, context),
-      (id) async {
-        final User user = User(
-          email: emailVal.value,
-          id: id,
-        );
-        final res = await _userInterface.create(user);
-        res.match(
-          (err) => handleError(AuthExceptionOutput.unknownError, context),
-          (_) => handleSuccess(context),
-        );
-      },
+      (backendError) => handleError(backendError, context),
+      (_) => handleSuccess(context),
     );
     setIdle();
     return unit;
   }
 
-  void handleError(AuthExceptionOutput e, BuildContext ctx) {
+  void handleError(BackendError e, BuildContext ctx) {
     DialogBox.show(
       context: ctx,
       title: e.title,
