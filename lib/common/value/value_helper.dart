@@ -47,26 +47,32 @@ class ValueHelper {
     bool verification = false,
   }) {
     final String field = verification ? "Password Verification Field" : "Password Field";
+    // Note: do not show dialogs if this is a verification password
+    // since the caller should show an error if they do not match
     try {
       return Option.of(PasswordValue(password));
     } on RequiredValueException catch (e) {
-      DialogBox.show(
-        context: context,
-        title: field,
-        content: "You haven't entered any password yet. Enter one and try again.",
-        continueText: "OK",
-        type: NotificationType.error,
-      );
+      if (!verification) {
+        DialogBox.show(
+          context: context,
+          title: field,
+          content: "You haven't entered any password yet. Enter one and try again.",
+          continueText: "OK",
+          type: NotificationType.error,
+        );
+      }
       logger.handleDebugLogErr(code: e.code, desc: e.message, element: field);
       return Option.none();
     } on TooShortValueException catch (e) {
-      DialogBox.show(
-        context: context,
-        title: "Invalid Password",
-        content: "Make sure your password is at least 6 characters long and try again.",
-        continueText: "OK",
-        type: NotificationType.error,
-      );
+      if (!verification) {
+        DialogBox.show(
+          context: context,
+          title: "Invalid Password",
+          content: "Make sure your password is at least 6 characters long and try again.",
+          continueText: "OK",
+          type: NotificationType.error,
+        );
+      }
       logger.handleDebugLogErr(code: e.code, desc: e.message, element: field);
       return Option.none();
     }

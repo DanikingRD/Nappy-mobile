@@ -26,7 +26,8 @@ final authRepositoryProvider = Provider<IAuthRepositoryFacade>((ref) {
 });
 
 final authUpdateProvider = StreamProvider((ref) {
-  return ref.read(authRepositoryProvider).onUserAuthUpdate();
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.onUserAuthUpdate();
 });
 
 class AuthRepositoryImpl implements IAuthRepositoryFacade {

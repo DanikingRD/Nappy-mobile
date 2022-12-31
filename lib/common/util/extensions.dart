@@ -17,10 +17,8 @@ extension DatabaseHelper on FirebaseFirestore {
   /// This will give you a [DocumentReference] to the current active user.
   /// If for some reason the user is not authenticated it will throw [NotAuthenticatedError]
   /// crashing the app.
-  Future<DocumentReference<User>> getUserDoc(IAuthRepositoryFacade interface) async {
-    final optionalUser = interface.getUserIdentifier();
-    final identifier = optionalUser.getOrElse(() => throw NotAuthenticatedError());
-    return collection(DatabaseCollections.users).doc(identifier.value).withConverter(
+  Future<DocumentReference<User>> getUserDoc(User user) async {
+    return collection(DatabaseCollections.users).doc(user.id.value).withConverter(
       fromFirestore: (snapshot, options) {
         if (snapshot.data() == null) {
           throw NullDocumentError();

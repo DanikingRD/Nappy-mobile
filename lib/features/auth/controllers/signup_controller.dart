@@ -12,15 +12,12 @@ import 'package:nappy_mobile/common/widgets/dialog_box.dart';
 import 'package:nappy_mobile/common/widgets/toast.dart';
 import 'package:nappy_mobile/features/auth/states/signup_form.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
-import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
-import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
 final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpForm>(
   (ref) {
     return SignUpController(
       authRepository: ref.read(authRepositoryProvider),
-      userInterface: ref.read(userRepositoryProvider),
       logger: NappyLogger.getLogger((SignUpController).toString()),
     );
   },
@@ -29,16 +26,13 @@ final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpF
 
 class SignUpController extends StateNotifier<SignUpForm> {
   final IAuthRepositoryFacade _authRepository;
-  final IUserFacade _userInterface;
   final NappyLogger _logger;
 
   SignUpController({
     required IAuthRepositoryFacade authRepository,
-    required IUserFacade userInterface,
     required NappyLogger logger,
   })  : _authRepository = authRepository,
         _logger = logger,
-        _userInterface = userInterface,
         super(SignUpForm.empty());
 
   Future<Unit> register(BuildContext context) async {
@@ -64,10 +58,10 @@ class SignUpController extends StateNotifier<SignUpForm> {
     );
 
     // Fast return if any of the inputs are invalid
-    if (email.isNone() || password.isNone() || passwordVerification.isNone()) {
+    if (email.isNone() || password.isNone()) {
       return unit;
     }
-    if (password != passwordVerification) {
+    if (passwordVerification.isNone() || password != passwordVerification) {
       DialogBox.show(
         context: context,
         title: "Password Field",

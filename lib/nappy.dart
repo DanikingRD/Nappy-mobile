@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
- import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/constants/themes.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
 import 'package:nappy_mobile/router.dart';

@@ -24,7 +24,10 @@
       "type": "dart",
       "program": "lib/init/main_testing.dart",
       "flutterMode": "release",
-      "preLaunchTask": "TestRunner"
+      "preLaunchTask": "TestRunner",
+      "args": [
+        "--verbose"
+      ]
     }
   ]
 }
