@@ -1,5 +1,5 @@
-import 'package:nappy_mobile/common/util/validator.dart';
 import 'package:nappy_mobile/common/exceptions/value_exceptions.dart';
+import 'package:nappy_mobile/common/util/validator.dart';
 import 'package:nappy_mobile/common/value/value.dart';
 
 class EmailAddressValue extends Value<String> {
