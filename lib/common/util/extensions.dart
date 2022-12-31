@@ -14,11 +14,13 @@ extension OptionalUtils<T> on Option<T> {
 }
 
 extension DatabaseHelper on FirebaseFirestore {
-  /// This will give you a [DocumentReference] to the current active user.
-  /// If for some reason the user is not authenticated it will throw [NotAuthenticatedError]
-  /// crashing the app.
-  Future<DocumentReference<User>> getUserDoc(User user) async {
-    return collection(DatabaseCollections.users).doc(user.id.value).withConverter(
+  
+  DocumentReference<User> getUserDoc(User user) {
+    return getUserDocFrom(user.id);
+  }
+
+  DocumentReference<User> getUserDocFrom(Identifier id) {
+    return collection(DatabaseCollections.users).doc(id.value).withConverter(
       fromFirestore: (snapshot, options) {
         if (snapshot.data() == null) {
           throw NullDocumentError();

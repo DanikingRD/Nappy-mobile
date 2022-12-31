@@ -7,13 +7,16 @@ import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/common/value/value_helper.dart';
 import 'package:nappy_mobile/features/auth/states/login_form.dart';
 import 'package:nappy_mobile/features/auth/views/widgets/auth_dialogs.dart';
+import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
+import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {
     return LoginController(
       authService: ref.read(authRepositoryProvider),
+      ref: ref,
       logger: NappyLogger.getLogger((LoginController).toString()),
     );
   },
@@ -22,12 +25,15 @@ final loginControllerProvider = StateNotifierProvider.autoDispose<LoginControlle
 
 class LoginController extends StateNotifier<LoginForm> {
   final IAuthRepositoryFacade _authService;
+  final Ref _ref;
   final NappyLogger _logger;
 
   LoginController({
     required IAuthRepositoryFacade authService,
+    required Ref ref,
     required NappyLogger logger,
   })  : _authService = authService,
+        _ref = ref,
         _logger = logger,
         super(
           LoginForm.empty(),
@@ -42,9 +48,17 @@ class LoginController extends StateNotifier<LoginForm> {
     final res = await _authService.signInWithGoogle();
     res.match(
       (exception) => AuthDialogs.onAuthError(exception, context),
-      (_) => AuthDialogs.onAuthSuccess(context),
+      (user) {
+        setActiveUser(user);
+        AuthDialogs.onAuthSuccess(context);
+      },
     );
     return unit;
+  }
+
+  /// Update the user provider
+  void setActiveUser(User user) {
+    _ref.read(userProvider.notifier).update((state) => Option.of(user));
   }
 
   Future<Unit> signIn(BuildContext context) async {

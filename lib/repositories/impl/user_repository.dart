@@ -9,6 +9,9 @@ import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
+/// Provides the data of the logged in user.
+final userProvider = StateProvider<Option<User>>((ref) => Option.none());
+
 final userRepositoryProvider = Provider<IUserFacade>((ref) {
   return UserRepositoryImpl(
     database: ref.read(databaseProvider),
@@ -28,14 +31,16 @@ class UserRepositoryImpl extends IUserFacade {
 
   @override
   Stream<User> watch(Identifier id) {
-    // TODO: implement watchUser
-    throw UnimplementedError();
+    return _database
+        .getUserDocFrom(id)
+        .snapshots()
+        .map((event) => event.data()!); // This can't be null
   }
 
   @override
   Future<Either<BackendError, Unit>> create(User user) async {
     try {
-      final doc = await _database.getUserDoc(user);
+      final doc = _database.getUserDoc(user);
       await doc.set(user);
       return right(unit);
     } on FirebaseException catch (e) {

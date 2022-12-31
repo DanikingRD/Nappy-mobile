@@ -4,6 +4,7 @@ import 'package:nappy_mobile/common/util/types.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
 import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';
+import 'package:nappy_mobile/models/user.dart';
 
 /// Represents the result of an authentication request.
 typedef AsyncAuthResult<T> = FutureResult<BackendError, T>;
@@ -22,11 +23,13 @@ abstract class IAuthRepositoryFacade {
 
   AsyncAuthResult<Unit> sendResetPasswordLink(EmailAddressValue email);
 
-  AsyncAuthResult<Unit> signInWithGoogle();
+  AsyncAuthResult<User> signInWithGoogle();
 
   Stream<Option<Identifier>> onUserAuthUpdate();
 
   Option<Identifier> getUserIdentifier();
+
+  
 
   Future<void> signOut();
 }
