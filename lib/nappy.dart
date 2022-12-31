@@ -53,9 +53,14 @@ class _NappyState extends ConsumerState<Nappy> {
   }
 
   Future<void> setActiveUser(Identifier id) async {
-    final data = await ref.watch(userRepositoryProvider).watch(id).first;
-    ref.read(userProvider.notifier).update((state) => Option.of(data));
-    setState(() {}); // TODO: check if this setState is necessary.
+    final data = await ref.watch(userRepositoryProvider).read(id);
+    data.match(
+      (err) {},
+      (user) {
+        ref.read(userProvider.notifier).update((state) => Option.of(user));
+        setState(() {}); // TODO: check if this setState is necessary.
+      },
+    );
   }
 }
 

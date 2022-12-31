@@ -15,23 +15,29 @@ import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
-final authRepositoryProvider = Provider<IAuthRepositoryFacade>((ref) {
-  final auth = ref.read(authProvider);
-  final google = ref.read(googleProvider);
-  final iface = ref.read(userRepositoryProvider);
-  final logger = NappyLogger.getLogger((AuthRepositoryImpl).toString());
-  return AuthRepositoryImpl(
-    firebaseAuth: auth,
-    googleSignIn: google,
-    userInterface: iface,
-    logger: logger,
-  );
-});
+final authRepositoryProvider = Provider<IAuthRepositoryFacade>(
+  (ref) {
+    final auth = ref.read(authProvider);
+    final google = ref.read(googleProvider);
+    final iface = ref.read(userRepositoryProvider);
+    final logger = NappyLogger.getLogger((AuthRepositoryImpl).toString());
+    return AuthRepositoryImpl(
+      firebaseAuth: auth,
+      googleSignIn: google,
+      userInterface: iface,
+      logger: logger,
+    );
+  },
+  name: (AuthRepositoryImpl).toString(),
+);
 
-final authUpdateProvider = StreamProvider((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.onUserAuthUpdate();
-});
+final authUpdateProvider = StreamProvider(
+  (ref) {
+    final authRepository = ref.watch(authRepositoryProvider);
+    return authRepository.onUserAuthUpdate();
+  },
+  name: "AuthStateListener",
+);
 
 class AuthRepositoryImpl implements IAuthRepositoryFacade {
   final firebase.FirebaseAuth _firebaseAuth;
@@ -52,7 +58,7 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
   /// Calls the repository sign up method and saves the user
   /// on the database.
   @override
-  AsyncAuthResult<Unit> register({
+  AsyncAuthResult<User> register({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
@@ -67,8 +73,7 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
         return left(AuthError.unknown);
       }
       final firebaseUser = credentials.user!;
-      final model = saveUserRecord(firebaseUser.toIdentifier(), firebaseUser.email!);
-      return right(unit);
+      return saveUserRecord(firebaseUser.toIdentifier(), firebaseUser.email!);
     } on firebase.FirebaseException catch (e) {
       return left(AuthError.mapCode(e.code));
     } catch (e) {
@@ -77,18 +82,23 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
   }
 
   @override
-  AsyncAuthResult<Unit> signIn({
+  AsyncAuthResult<User> signIn({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
     try {
       _logger.d('Signing user with email: $email');
-      await _firebaseAuth.signInWithEmailAndPassword(
+      final credentials = await _firebaseAuth.signInWithEmailAndPassword(
         email: email.value,
         password: password.value,
       );
+      if (credentials.user == null) {
+        return left(AuthError.unknown);
+      }
+      //final User user = await _userInterface.watch(credentials.user!.toIdentifier()).first;
+      final userRequest = await _userInterface.read(credentials.user!.toIdentifier());
       _logger.d('User was succesfully signed in.');
-      return right(unit);
+      return userRequest;
     } on firebase.FirebaseException catch (e) {
       return left(AuthError.mapCode(e.code));
     } catch (e) {
@@ -119,8 +129,9 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
         return saveUserRecord(id, firebaseUser.email!);
       }
       // Read user
-      final User user = await _userInterface.watch(id).first;
-      return right(user);
+      // final User user = await _userInterface.watch(id).first;
+      final userRequest = await _userInterface.read(id);
+      return userRequest;
     } on firebase.FirebaseException catch (e) {
       return left(AuthError.mapCode(e.code));
     } catch (e) {

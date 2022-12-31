@@ -10,14 +10,17 @@ import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
 /// Provides the data of the logged in user.
-final userProvider = StateProvider<Option<User>>((ref) => Option.none());
+final userProvider = StateProvider<Option<User>>((ref) => Option.none(), name: "UserProvider");
 
-final userRepositoryProvider = Provider<IUserFacade>((ref) {
-  return UserRepositoryImpl(
-    database: ref.read(databaseProvider),
-    logger: NappyLogger.getLogger((UserRepositoryImpl).toString()),
-  );
-});
+final userRepositoryProvider = Provider<IUserFacade>(
+  (ref) {
+    return UserRepositoryImpl(
+      database: ref.read(databaseProvider),
+      logger: NappyLogger.getLogger((UserRepositoryImpl).toString()),
+    );
+  },
+  name: (UserRepositoryImpl).toString(),
+);
 
 class UserRepositoryImpl extends IUserFacade {
   final FirebaseFirestore _database;
@@ -43,6 +46,19 @@ class UserRepositoryImpl extends IUserFacade {
       final doc = _database.getUserDoc(user);
       await doc.set(user);
       return right(unit);
+    } on FirebaseException catch (e) {
+      return left(DatabaseError.mapCode(e.code));
+    } catch (e) {
+      return left(DatabaseError.unknown);
+    }
+  }
+
+  @override
+  AsyncDatabaseResult<User> read(Identifier id) async {
+    try {
+      final doc = _database.getUserDocFrom(id);
+      final user = await doc.get();
+      return right(user.data()!);
     } on FirebaseException catch (e) {
       return left(DatabaseError.mapCode(e.code));
     } catch (e) {

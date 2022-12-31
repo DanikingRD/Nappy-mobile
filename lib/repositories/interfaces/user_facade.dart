@@ -11,4 +11,5 @@ abstract class IUserFacade {
   Stream<User> watch(Identifier id);
 
   AsyncDatabaseResult<Unit> create(User user);
+  AsyncDatabaseResult<User> read(Identifier id);
 }

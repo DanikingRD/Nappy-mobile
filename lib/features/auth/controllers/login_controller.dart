@@ -49,8 +49,8 @@ class LoginController extends StateNotifier<LoginForm> {
     res.match(
       (exception) => AuthDialogs.onAuthError(exception, context),
       (user) {
-        setActiveUser(user);
-        AuthDialogs.onAuthSuccess(context);
+        //   setActiveUser(user);
+        //  AuthDialogs.onAuthSuccess(context);
       },
     );
     return unit;
@@ -58,7 +58,7 @@ class LoginController extends StateNotifier<LoginForm> {
 
   /// Update the user provider
   void setActiveUser(User user) {
-    _ref.read(userProvider.notifier).update((state) => Option.of(user));
+    _ref.read(userProvider.notifier).update((_) => Option.of(user));
   }
 
   Future<Unit> signIn(BuildContext context) async {
@@ -88,10 +88,16 @@ class LoginController extends StateNotifier<LoginForm> {
       password: passwordVal,
     );
     res.match(
-      (exception) => AuthDialogs.onAuthError(exception, context),
-      (_) => AuthDialogs.onAuthSuccess(context),
+      (exception) {
+        setIdle();
+        AuthDialogs.onAuthError(exception, context);
+      },
+      (user) {
+        // Not need to call setIdle() here as the view is automatically redirected
+        // to the home page before it even runs.
+        // Otherwise it will throw an error saying that the widget was disposed..
+      },
     );
-    setIdle();
     return unit;
   }
 

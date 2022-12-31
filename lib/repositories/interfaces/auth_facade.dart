@@ -11,12 +11,12 @@ typedef AsyncAuthResult<T> = FutureResult<BackendError, T>;
 
 /// Represents an Authentication Repository.
 abstract class IAuthRepositoryFacade {
-  AsyncAuthResult<Unit> register({
+  AsyncAuthResult<User> register({
     required EmailAddressValue email,
     required PasswordValue password,
   });
 
-  AsyncAuthResult<Unit> signIn({
+  AsyncAuthResult<User> signIn({
     required EmailAddressValue email,
     required PasswordValue password,
   });

@@ -28,7 +28,7 @@ void main() {
     return ProviderScope(
       overrides: [
         loginControllerProvider.overrideWith((ref) {
-          return LoginController(authService: authInterface, logger: logger);
+          return LoginController(authService: authInterface, logger: logger, ref: ref);
         })
       ],
       child: const MaterialApp(
