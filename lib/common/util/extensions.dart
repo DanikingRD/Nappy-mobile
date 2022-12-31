@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/common/constants/database_collections.dart';
 import 'package:nappy_mobile/common/exceptions/database_exceptions.dart';
+import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 
@@ -10,6 +11,7 @@ extension OptionalUtils<T> on Option<T> {
     return getOrElse(() => throw 'How did you end up here? ');
   }
 }
+
 extension DatabaseHelper on FirebaseFirestore {
   /// This will give you a [DocumentReference] to the current active user.
   /// If for some reason the user is not authenticated it will throw [NotAuthenticatedError]
