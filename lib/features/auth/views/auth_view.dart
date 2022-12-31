@@ -25,8 +25,8 @@ class AuthView extends ConsumerWidget {
               },
               Expanded(
                 flex: Responsive.isMediumScreen(context) ? 2 : 1,
-                child: page
-              )
+                child: page,
+              ),
             ],
           ),
         ),

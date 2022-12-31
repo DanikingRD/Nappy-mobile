@@ -7,9 +7,7 @@ import 'package:nappy_mobile/features/auth/views/widgets/external_auth_button.da
 import 'package:nappy_mobile/features/auth/views/widgets/external_auth_divider.dart';
 
 class AuthProvidersList extends StatelessWidget {
-  const AuthProvidersList({
-    super.key,
-  });
+  const AuthProvidersList({super.key});
 
   @override
   Widget build(BuildContext context) {

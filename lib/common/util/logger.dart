@@ -17,6 +17,13 @@ class NappyLogger extends Logger {
     e('[$element] has thrown exception [$code]: $desc');
   }
 
+  factory NappyLogger.test(String name) {
+    return NappyLogger._(
+      printer: NappyLoggerPrinter(className: "${name}Test"),
+      level: Level.info,
+    );
+  }
+
   static NappyLogger getLogger(String className) {
     final Level level;
     if (NappyConfig.isDebugging) {

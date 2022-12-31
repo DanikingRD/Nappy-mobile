@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/constants/ui.dart';
+import 'package:nappy_mobile/common/value/value.dart';
 import 'package:nappy_mobile/common/widgets/primary_button.dart';
 import 'package:nappy_mobile/common/widgets/visibility_textfield.dart';
 import 'package:nappy_mobile/features/auth/controllers/login_controller.dart';
@@ -12,6 +13,14 @@ import 'package:nappy_mobile/features/auth/views/widgets/auth_providers_list.dar
 import 'package:nappy_mobile/router.dart';
 
 class LoginPage extends ConsumerWidget {
+  // Public access keys
+  static const emailTextFieldKey = Key("email");
+  static const passwordTextFieldKey = Key("password");
+  static const forgotPasswordButtonKey = Key("forgotPassword");
+  static const submitButtonKey = Key("submit");
+  static const externalAuthProvidersKey = Key("externalAuthProviders");
+  static const registerAccountButtonKey = Key("registerAccount");
+
   const LoginPage({
     super.key,
   });
@@ -26,6 +35,7 @@ class LoginPage extends ConsumerWidget {
         final textTheme = theme.textTheme;
         return [
           TextFormField(
+            key: emailTextFieldKey,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.email_outlined,
@@ -41,6 +51,7 @@ class LoginPage extends ConsumerWidget {
           ),
           kTextFieldGap,
           VisibilityTextField(
+            key: passwordTextFieldKey,
             textInputAction: TextInputAction.done,
             hintText: "Enter your password",
             prefixIcon: Icon(
@@ -60,6 +71,7 @@ class LoginPage extends ConsumerWidget {
             child: MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
+                key: forgotPasswordButtonKey,
                 onTap: () {
                   Routes.navigate(context, Routes.recoveryRoute);
                 },
@@ -72,6 +84,7 @@ class LoginPage extends ConsumerWidget {
           ),
           kDefaultMargin,
           PrimaryButton(
+            key: submitButtonKey,
             onPressed: () async {
               await ref.read(loginControllerProvider.notifier).signIn(context);
             },
@@ -79,7 +92,10 @@ class LoginPage extends ConsumerWidget {
             loading: isLoading,
           ),
           kDefaultMargin,
-          const AuthProvidersList(),
+          kDefaultMargin,
+          const AuthProvidersList(
+            key: externalAuthProvidersKey,
+          ),
           Row(
             children: [
               const Spacer(),
@@ -90,6 +106,7 @@ class LoginPage extends ConsumerWidget {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
+                  key: registerAccountButtonKey,
                   onTap: () {
                     Routes.navigate(context, Routes.signupRoute);
                   },
@@ -101,7 +118,7 @@ class LoginPage extends ConsumerWidget {
               ),
               const Spacer(),
             ],
-          )
+          ),
         ];
       },
     ).animate().fade(duration: AuthView.fadeDuration);

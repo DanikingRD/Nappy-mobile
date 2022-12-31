@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/util/responsive.dart';
 
