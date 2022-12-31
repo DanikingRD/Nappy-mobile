@@ -22,7 +22,7 @@ abstract class IAuthRepositoryFacade {
 
   AsyncAuthResult<Unit> sendResetPasswordLink(EmailAddressValue email);
 
-  AsyncAuthResult<Identifier> signInWithGoogle();
+  AsyncAuthResult<Unit> signInWithGoogle();
 
   Stream<Option<Identifier>> onUserAuthUpdate();
 
