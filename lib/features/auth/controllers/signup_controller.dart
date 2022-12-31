@@ -96,14 +96,14 @@ class SignUpController extends StateNotifier<SignUpForm> {
     );
     result.match(
       (error) => handleError(error, context),
-      (_) async {
+      (id) async {
         final User user = User(
           email: emailVal.value,
-          id: Identifier(),
+          id: id,
         );
         final res = await _userInterface.create(user);
         res.match(
-          (err) => handleError(AuthExceptionOutput.serverError, context),
+          (err) => handleError(AuthExceptionOutput.unknownError, context),
           (_) => handleSuccess(context),
         );
       },

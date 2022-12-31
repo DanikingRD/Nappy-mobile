@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nappy_mobile/features/auth/views/auth_view.dart';
 import 'package:nappy_mobile/features/auth/views/pages/account_recovery_page.dart';

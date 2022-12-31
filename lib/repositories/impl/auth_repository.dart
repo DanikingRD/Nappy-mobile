@@ -6,6 +6,8 @@ import 'package:fpdart/fpdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nappy_mobile/common/exceptions/auth_exceptions.dart';
 import 'package:nappy_mobile/common/global_providers.dart';
+import 'package:nappy_mobile/common/util/extensions.dart';
+import 'package:nappy_mobile/common/util/types.dart';
 import 'package:nappy_mobile/common/value/email_address_value.dart';
 import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/common/value/password_value.dart';
@@ -34,26 +36,29 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
   })  : _firebaseAuth = firebaseAuth,
         _googleAuth = googleSignIn;
   @override
-  Future<Either<AuthExceptionOutput, Unit>> register({
+  AsyncAuthResult<Identifier> register({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      final credentials = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email.value,
         password: password.value,
       );
-
-      return right(unit);
+      if (credentials.user == null) {
+        return left(AuthExceptionOutput.unknownError);
+      }
+      final Identifier id = credentials.user!.toIdentifier();
+      return right(id);
     } on FirebaseException catch (e) {
       return left(AuthException.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.serverError);
+      return left(AuthExceptionOutput.unknownError);
     }
   }
 
   @override
-  Future<Either<AuthExceptionOutput, Unit>> signIn({
+  AsyncAuthResult<Unit> signIn({
     required EmailAddressValue email,
     required PasswordValue password,
   }) async {
@@ -67,12 +72,12 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
     } on FirebaseException catch (e) {
       return left(AuthException.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.serverError);
+      return left(AuthExceptionOutput.unknownError);
     }
   }
 
   @override
-  Future<Either<AuthExceptionOutput, Unit>> signInWithGoogle() async {
+  AsyncAuthResult<Unit> signInWithGoogle() async {
     try {
       if (kIsWeb) {
         final provider = GoogleAuthProvider();
@@ -95,7 +100,7 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
     } on FirebaseException catch (e) {
       return left(AuthException.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.serverError);
+      return left(AuthExceptionOutput.unknownError);
     }
   }
 
@@ -106,32 +111,32 @@ class AuthRepositoryImpl implements IAuthRepositoryFacade {
       return Option.fromPredicateMap<User?, Identifier>(
         event,
         (user) => user != null,
-        (user) => Identifier.fromUUID(user!.uid),
+        (user) => user!.toIdentifier(),
       );
     });
   }
 
   @override
-  Future<Either<AuthExceptionOutput, Unit>> sendResetPasswordLink(EmailAddressValue email) async {
+  AsyncAuthResult<Unit> sendResetPasswordLink(EmailAddressValue email) async {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email.value);
       return right(unit);
     } on FirebaseAuthException catch (e) {
       return left(AuthException.mapCode(e.code));
     } catch (e) {
-      return left(AuthExceptionOutput.serverError);
+      return left(AuthExceptionOutput.unknownError);
     }
   }
 
   @override
   Option<Identifier> getUserIdentifier() {
     final user = _firebaseAuth.currentUser;
-    final userMap = Option.fromPredicateMap<User?, Identifier>(
+    final idMapping = Option.fromPredicateMap<User?, Identifier>(
       user,
       (user) => user != null,
-      (user) => Identifier.fromUUID(user!.uid),
+      (user) => user!.toIdentifier(),
     );
-    return userMap;
+    return idMapping;
   }
 
   @override

@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/common/constants/database_collections.dart';
 import 'package:nappy_mobile/common/exceptions/database_exceptions.dart';
-import 'package:nappy_mobile/common/util/logger.dart';
+import 'package:nappy_mobile/common/value/identifier.dart';
 import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 
@@ -30,5 +31,11 @@ extension DatabaseHelper on FirebaseFirestore {
         return value.toMap();
       },
     );
+  }
+}
+
+extension FirebaseUserIdentifier on auth.User {
+  Identifier toIdentifier() {
+    return Identifier.fromUUID(uid);
   }
 }

@@ -30,7 +30,7 @@ enum AuthExceptionOutput {
   canceledByUser("Canceled By User", "The operation was canceled by the user"),
 
   /// Thrown if none of the previous errors were matched.
-  serverError("Unknown Error", "Contact with support."),
+  unknownError("Unknown Error", "Contact with support."),
   ;
 
   final String title;
@@ -48,12 +48,12 @@ class AuthException {
     'wrong-password': AuthExceptionOutput.wrongPassword,
     'operation-not-allowed': AuthExceptionOutput.opNotAllowed,
     'popup-closed-by-user': AuthExceptionOutput.canceledByUser,
-    'undefined': AuthExceptionOutput.serverError,
+    'undefined': AuthExceptionOutput.unknownError,
   };
 
   static AuthExceptionOutput mapCode(String code) {
     final val = _authExceptions[code];
-    final output = val ?? AuthExceptionOutput.serverError;
+    final output = val ?? AuthExceptionOutput.unknownError;
     NappyLogger.getLogger((AuthException).toString()).i(
       'Exception $code was thrown: ${output.description}',
     );
