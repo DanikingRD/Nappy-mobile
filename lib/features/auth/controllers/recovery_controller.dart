@@ -13,7 +13,7 @@ final recoveryControllerProvider = StateNotifierProvider.autoDispose<RecoveryCon
   (ref) {
     return RecoveryController(
       logger: NappyLogger.getLogger((RecoveryController).toString()),
-      authRepository: ref.read(authRepositoryProvider),
+      authRepository: ref.watch(authRepositoryProvider),
     );
   },
   name: (RecoveryController).toString(),

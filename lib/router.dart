@@ -34,6 +34,12 @@ class Routes {
       rootRoute: (route) {
         return const MaterialPage(child: HomeView());
       },
+      signupRoute: (route) {
+        return const MaterialPage(child: HomeView());
+      },
+      loginRoute: (route) {
+        return const MaterialPage(child: HomeView());
+      },
     },
   );
   static void navigate(BuildContext context, String route) {

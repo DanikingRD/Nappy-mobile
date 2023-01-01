@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/common/exceptions/backend_error_mapping.dart';
+import 'package:nappy_mobile/common/util/auth.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
@@ -19,9 +20,9 @@ import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpForm>(
   (ref) {
     return SignUpController(
-      authRepository: ref.read(authRepositoryProvider),
-      ref: ref,
+      authRepository: ref.watch(authRepositoryProvider),
       logger: NappyLogger.getLogger((SignUpController).toString()),
+      ref: ref,
     );
   },
   name: (SignUpController).toString(),
@@ -29,16 +30,15 @@ final signUpControllerProvider = StateNotifierProvider<SignUpController, SignUpF
 
 class SignUpController extends StateNotifier<SignUpForm> {
   final IAuthRepositoryFacade _authRepository;
-  final Ref _ref;
   final NappyLogger _logger;
-
+  final Ref _ref;
   SignUpController({
     required IAuthRepositoryFacade authRepository,
-    required Ref ref,
     required NappyLogger logger,
+    required Ref ref,
   })  : _authRepository = authRepository,
-        _ref = ref,
         _logger = logger,
+        _ref = ref,
         super(SignUpForm.empty());
 
   Future<Unit> register(BuildContext context) async {
@@ -99,17 +99,11 @@ class SignUpController extends StateNotifier<SignUpForm> {
       },
       (user) {
         // Not need to call setIdle() here as the view is automatically redirected
-        // to the home page before it even runs. 
+        // to the home page before it even runs.
         // Otherwise it will throw an error saying that the widget was disposed..
       },
     );
-    setIdle();
     return unit;
-  }
-
-  /// Update the user provider
-  void setActiveUser(User user) {
-    _ref.read(userProvider.notifier).update((state) => Option.of(user));
   }
 
   void handleError(BackendError e, BuildContext ctx) {

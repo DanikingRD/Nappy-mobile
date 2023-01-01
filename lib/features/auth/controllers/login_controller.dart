@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:nappy_mobile/common/util/auth.dart';
 import 'package:nappy_mobile/common/util/connection.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/logger.dart';
@@ -15,26 +16,26 @@ import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {
     return LoginController(
-      authService: ref.read(authRepositoryProvider),
-      ref: ref,
+      authService: ref.watch(authRepositoryProvider),
       logger: NappyLogger.getLogger((LoginController).toString()),
+      ref: ref,
     );
   },
   name: (LoginController).toString(),
 );
 
 class LoginController extends StateNotifier<LoginForm> {
-  final IAuthRepositoryFacade _authService;
-  final Ref _ref;
+  final IAuthRepositoryFacade _authInterface;
   final NappyLogger _logger;
+  final Ref _ref;
 
   LoginController({
     required IAuthRepositoryFacade authService,
-    required Ref ref,
     required NappyLogger logger,
-  })  : _authService = authService,
-        _ref = ref,
+    required Ref ref,
+  })  : _authInterface = authService,
         _logger = logger,
+        _ref = ref,
         super(
           LoginForm.empty(),
         );
@@ -45,20 +46,17 @@ class LoginController extends StateNotifier<LoginForm> {
       return unit;
     }
     // Do not show loading indicator when signing in with google.
-    final res = await _authService.signInWithGoogle();
+    final res = await _authInterface.signInWithGoogle();
     res.match(
-      (exception) => AuthDialogs.onAuthError(exception, context),
+      (exception) {
+        AuthDialogs.onAuthError(exception, context);
+      },
       (user) {
         //   setActiveUser(user);
         //  AuthDialogs.onAuthSuccess(context);
       },
     );
     return unit;
-  }
-
-  /// Update the user provider
-  void setActiveUser(User user) {
-    _ref.read(userProvider.notifier).update((_) => Option.of(user));
   }
 
   Future<Unit> signIn(BuildContext context) async {
@@ -83,7 +81,7 @@ class LoginController extends StateNotifier<LoginForm> {
     final emailVal = email.getOrThrow();
     final passwordVal = password.getOrThrow();
     setLoading();
-    final res = await _authService.signIn(
+    final res = await _authInterface.signIn(
       email: emailVal,
       password: passwordVal,
     );

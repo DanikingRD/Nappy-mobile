@@ -17,9 +17,9 @@ import 'package:nappy_mobile/repositories/interfaces/user_facade.dart';
 
 final authRepositoryProvider = Provider<IAuthRepositoryFacade>(
   (ref) {
-    final auth = ref.read(authProvider);
-    final google = ref.read(googleProvider);
-    final iface = ref.read(userRepositoryProvider);
+    final auth = ref.watch(authProvider);
+    final google = ref.watch(googleProvider);
+    final iface = ref.watch(userRepositoryProvider);
     final logger = NappyLogger.getLogger((AuthRepositoryImpl).toString());
     return AuthRepositoryImpl(
       firebaseAuth: auth,

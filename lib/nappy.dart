@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/constants/themes.dart';
-import 'package:nappy_mobile/common/value/identifier.dart';
+import 'package:nappy_mobile/common/util/auth.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
 import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/router.dart';
 import 'package:routemaster/routemaster.dart';
 
-class Nappy extends ConsumerStatefulWidget {
+class Nappy extends ConsumerWidget {
   const Nappy({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _NappyState();
-}
-
-class _NappyState extends ConsumerState<Nappy> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authEvents = ref.watch(authUpdateProvider);
     return authEvents.when(
       data: (optionalId) {
@@ -29,7 +23,7 @@ class _NappyState extends ConsumerState<Nappy> {
               return optionalId.match(
                 () => Routes.publicRoutes,
                 (id) {
-                  setActiveUser(id);
+                  setActiveUserWidget(ref, id);
                   return ref.read(userProvider).match(
                         () => Routes.publicRoutes,
                         (_) => Routes.privateRoutes,
@@ -49,17 +43,6 @@ class _NappyState extends ConsumerState<Nappy> {
           color: NappyColors.primary,
         ),
       ),
-    );
-  }
-
-  Future<void> setActiveUser(Identifier id) async {
-    final data = await ref.watch(userRepositoryProvider).read(id);
-    data.match(
-      (err) {},
-      (user) {
-        ref.read(userProvider.notifier).update((state) => Option.of(user));
-        setState(() {}); // TODO: check if this setState is necessary.
-      },
     );
   }
 }
