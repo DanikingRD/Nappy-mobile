@@ -12,6 +12,7 @@ class Routes {
   static const String loginRoute = "/login";
   static const String signupRoute = "/signup";
   static const String recoveryRoute = "/recovery";
+  static const String cardsRoute = "/cards";
   static final publicRoutes = RouteMap(
     routes: {
       rootRoute: (route) {
@@ -34,12 +35,12 @@ class Routes {
       rootRoute: (route) {
         return const MaterialPage(child: DashboardView());
       },
-      signupRoute: (route) {
-        return const MaterialPage(child: DashboardView());
-      },
-      loginRoute: (route) {
-        return const MaterialPage(child: DashboardView());
-      },
+      // signupRoute: (route) {
+      //   return const MaterialPage(child: DashboardView());
+      // },
+      // loginRoute: (route) {
+      //   return const MaterialPage(child: DashboardView());
+      // },
     },
   );
   static void navigate(BuildContext context, String route) {
