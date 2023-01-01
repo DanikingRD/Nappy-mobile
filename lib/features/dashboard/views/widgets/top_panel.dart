@@ -15,9 +15,9 @@ class DashboardTopPanel extends StatelessWidget implements PreferredSizeWidget {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     return AppBar(
+      backgroundColor: const Color(0xffF8F8F8),
       leadingWidth: 100.0,
       elevation: 0.0,
-      backgroundColor: Colors.white,
       leading: useDesktopLayout
           ? const _DesktopTopPanel()
           : _MobileTopPanel(

@@ -3,7 +3,7 @@ import 'package:nappy_mobile/features/auth/views/auth_view.dart';
 import 'package:nappy_mobile/features/auth/views/pages/account_recovery_page.dart';
 import 'package:nappy_mobile/features/auth/views/pages/login_page.dart';
 import 'package:nappy_mobile/features/auth/views/pages/signup_page.dart';
-import 'package:nappy_mobile/features/dashboard/dashboard_view.dart';
+import 'package:nappy_mobile/features/dashboard/views/dashboard_view.dart';
 import 'package:routemaster/routemaster.dart';
 
 class Routes {
