@@ -14,82 +14,85 @@ class DashboardTopPanel extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    return AppBar(
-      backgroundColor: const Color(0xffF8F8F8),
-      leadingWidth: 100.0,
-      elevation: 0.0,
-      leading: useDesktopLayout
-          ? const _DesktopTopPanel()
-          : _MobileTopPanel(
-              scaffoldKey: scaffoldKey,
-            ),
-      title: Text(
-        "Dashboard",
-        style: textTheme.headline1!.copyWith(
-          color: NappyColors.dark,
-          fontWeight: FontWeight.bold,
-          fontSize: 32,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+      child: AppBar(
+        backgroundColor: const Color(0xffF8F8F8),
+        leadingWidth: 100.0,
+        elevation: 0.0,
+        leading: useDesktopLayout
+            ? const _DesktopTopPanel()
+            : _MobileTopPanel(
+                scaffoldKey: scaffoldKey,
+              ),
+        title: Text(
+          "Dashboard",
+          style: textTheme.headline1!.copyWith(
+            color: NappyColors.dark,
+            fontWeight: FontWeight.bold,
+            fontSize: 32,
+          ),
         ),
-      ),
-      centerTitle: true,
-      actions: [
-        if (useDesktopLayout) ...{
-          Container(
-            decoration: BoxDecoration(
-              color: NappyColors.profileContainerColor,
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 25,
-                    decoration: BoxDecoration(
-                      color: NappyColors.dark,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "Your username",
-                        style: textTheme.bodyText1!.copyWith(color: NappyColors.dark),
+        centerTitle: true,
+        actions: [
+          if (useDesktopLayout) ...{
+            Container(
+              decoration: BoxDecoration(
+                color: NappyColors.profileContainerColor,
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 25,
+                      decoration: BoxDecoration(
+                        color: NappyColors.dark,
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
-                      Text(
-                        "admin",
-                        style: textTheme.bodyText1!.copyWith(color: NappyColors.dark),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: NappyColors.dark,
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Your username",
+                          style: textTheme.bodyText1!.copyWith(color: NappyColors.dark),
+                        ),
+                        Text(
+                          "admin",
+                          style: textTheme.bodyText1!.copyWith(color: NappyColors.dark),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: NappyColors.dark,
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        }
-      ],
+          }
+        ],
+      ),
     );
   }
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size.fromHeight(70.0);
+  Size get preferredSize => const Size.fromHeight(100.0);
 }
 
 class _DesktopTopPanel extends StatelessWidget {
