@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
 import 'package:nappy_mobile/common/constants/themes.dart';
 import 'package:nappy_mobile/common/util/auth.dart';
+import 'package:nappy_mobile/common/util/logger.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
 import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/router.dart';
@@ -23,11 +24,19 @@ class Nappy extends ConsumerWidget {
               return optionalId.match(
                 () => Routes.publicRoutes,
                 (id) {
-                  setActiveUserWidget(ref, id);
-                  return ref.read(userProvider).match(
-                        () => Routes.publicRoutes,
-                        (_) => Routes.privateRoutes,
-                      );
+                  return ref.watch(userProvider).match(
+                    () {
+                      setActiveUserWidget(ref, id);
+                      return Routes.publicRoutes;
+                    },
+                    (user) {
+                      if (user.id != id) {
+                        // We got a different session
+                        setActiveUserWidget(ref, id);
+                      }
+                      return Routes.privateRoutes;
+                    },
+                  );
                 },
               );
             },
