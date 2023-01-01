@@ -18,6 +18,11 @@ TextStyle kBodyText1 = GoogleFonts.raleway().copyWith(
   color: NappyColors.primary,
   fontWeight: FontWeight.normal,
 );
+TextStyle kBodyText2 = GoogleFonts.raleway().copyWith(
+  fontSize: 14,
+  color: NappyColors.primary,
+  fontWeight: FontWeight.normal,
+);
 
 InputDecorationTheme kPrimaryInputDecorationTheme = InputDecorationTheme(
   fillColor: NappyColors.primaryFill,

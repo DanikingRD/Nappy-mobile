@@ -6,18 +6,27 @@ import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/util/extensions.dart';
 import 'package:nappy_mobile/common/util/responsive.dart';
 import 'package:nappy_mobile/common/widgets/primary_button.dart';
+import 'package:nappy_mobile/features/dashboard/side_panel.dart';
 import 'package:nappy_mobile/features/dashboard/top_panel.dart';
 import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 
 class DashboardView extends ConsumerWidget {
   const DashboardView({super.key});
 
+  static final scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userProvider).getOrThrow();
     final useDesktopLayout = Responsive.isTabletOrGreater(context, offset: 250);
     return Scaffold(
-      appBar: DashboardTopPanel(useDesktopLayout: useDesktopLayout),
+      key: scaffoldKey,
+      appBar: DashboardTopPanel(
+        useDesktopLayout: useDesktopLayout,
+        scaffoldKey: scaffoldKey,
+      ),
+      drawer: const Drawer(
+        child: SidePanel(),
+      ),
       body: useDesktopLayout ? const DesktopLayout() : const MobileLayout(),
     );
   }
