@@ -12,6 +12,8 @@ import 'package:nappy_mobile/models/user.dart';
 import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
 import 'package:nappy_mobile/repositories/impl/user_repository.dart';
 import 'package:nappy_mobile/repositories/interfaces/auth_facade.dart';
+import 'package:nappy_mobile/router.dart';
+import 'package:routemaster/routemaster.dart';
 
 final loginControllerProvider = StateNotifierProvider.autoDispose<LoginController, LoginForm>(
   (ref) {

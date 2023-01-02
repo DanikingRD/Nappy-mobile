@@ -37,5 +37,14 @@ List<NavigationRailDestination> getDashboardDestinations(TextTheme textTheme) {
         ),
       ),
     ),
+    NavigationRailDestination(
+      icon: const Icon(Icons.exit_to_app),
+      label: Text(
+        "Logout",
+        style: textTheme.bodyText1!.copyWith(
+          color: NappyColors.dark,
+        ),
+      ),
+    ),
   ];
 }

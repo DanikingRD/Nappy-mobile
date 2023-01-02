@@ -8,16 +8,25 @@ import 'package:routemaster/routemaster.dart';
 
 class Routes {
   const Routes._();
+
   static const String rootRoute = "/";
   static const String loginRoute = "/login";
   static const String signupRoute = "/signup";
   static const String recoveryRoute = "/recovery";
-  static const String cardsRoute = "/cards";
+
+  // Private routes
+  static const String cards = "/cards";
+  static const String contacts = "/contacts";
+
+  // Initial Routes
+  static const String publicInitialRoute = loginRoute;
+  static const String privateInitialRoute = rootRoute;
+
+  /// Purpose: Let the user access the public routes of the app,
+  /// i.e pages that are visible to everyone if they are logged out.
   static final publicRoutes = RouteMap(
+    onUnknownRoute: (_) => const Redirect(loginRoute),
     routes: {
-      rootRoute: (route) {
-        return const MaterialPage(child: AuthView(page: LoginPage()));
-      },
       loginRoute: (route) {
         return const MaterialPage(child: AuthView(page: LoginPage()));
       },
@@ -30,20 +39,22 @@ class Routes {
     },
   );
 
+  /// Purpose: Do not allow anyone to access these routes without signing jn.
   static final privateRoutes = RouteMap(
+    onUnknownRoute: (_) => const Redirect(privateInitialRoute),
     routes: {
       rootRoute: (route) {
         return const MaterialPage(child: DashboardView());
       },
-      // signupRoute: (route) {
+      // cards: (route) {
       //   return const MaterialPage(child: DashboardView());
       // },
-      // loginRoute: (route) {
+      // contacts: (route) {
       //   return const MaterialPage(child: DashboardView());
       // },
     },
   );
   static void navigate(BuildContext context, String route) {
-    Routemaster.of(context).replace(route);
+    Routemaster.of(context).push(route);
   }
 }

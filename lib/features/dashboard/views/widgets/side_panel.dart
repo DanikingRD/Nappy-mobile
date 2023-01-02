@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/constants/colors.dart';
+import 'package:nappy_mobile/common/global_providers.dart';
 import 'package:nappy_mobile/common/util/responsive.dart';
 import 'package:nappy_mobile/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:nappy_mobile/features/dashboard/views/widgets/destinations.dart';
+import 'package:nappy_mobile/repositories/impl/auth_repository.dart';
+import 'package:nappy_mobile/router.dart';
 
 class DashboardSidePanel extends ConsumerWidget {
   const DashboardSidePanel({
     super.key,
   });
 
-  static const itemCount = 4;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textTheme = Theme.of(context).textTheme;
@@ -29,6 +31,10 @@ class DashboardSidePanel extends ConsumerWidget {
                 child: NavigationRail(
                   onDestinationSelected: (pageIndex) {
                     ref.read(dashboardController.notifier).state = pageIndex;
+                    if (pageIndex == 4) {
+                      ref.read(authRepositoryProvider).signOut();
+                    }
+                    Routes.navigate(context, mapIndexToRoute(ref.read(dashboardController)));
                   },
                   backgroundColor: const Color(0xffF8F8F8),
                   useIndicator: true,

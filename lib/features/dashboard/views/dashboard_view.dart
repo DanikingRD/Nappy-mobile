@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nappy_mobile/common/util/responsive.dart';
 import 'package:nappy_mobile/features/dashboard/controllers/dashboard_controller.dart';
-import 'package:nappy_mobile/features/dashboard/views/pages/dashboard_overview.dart';
 import 'package:nappy_mobile/features/dashboard/views/widgets/side_panel.dart';
 import 'package:nappy_mobile/features/dashboard/views/widgets/top_panel.dart';
 
