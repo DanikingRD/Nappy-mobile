@@ -39,7 +39,7 @@ class Routes {
     },
   );
 
-  /// Purpose: Do not allow anyone to access these routes without signing jn.
+  /// Purpose: Do not allow anyone to access these routes without signing in.
   static final privateRoutes = RouteMap(
     onUnknownRoute: (_) => const Redirect(privateInitialRoute),
     routes: {
